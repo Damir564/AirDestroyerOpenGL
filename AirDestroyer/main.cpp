@@ -45,6 +45,11 @@ int main()
         1, 2, 3    // second triangle
     };
     
+    glm::mat4 transform = glm::mat4(1.0f);
+    float position = 0.0f;
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
+
     unsigned int VBO, VAO, EBO;
     // OnLoad
     //------------------------------------------------------------------------
@@ -75,9 +80,24 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        position = position - 0.000001 * deltaTime;
+        transform = glm::translate(transform, glm::vec3(0.0f, -0.1f * deltaTime, 0.0f));
+        float sizeY = glm::length(glm::vec3(transform[1]));
+        std::cout << transform[3][1] << std::endl;
+        
+
+        if (transform[3][1] <= -1.5f) {
+            transform[3][1] = 1.5f;
+            position = 0.0f;
+        }
 
 
         ourShader.use();
+        unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
