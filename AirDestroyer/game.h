@@ -32,6 +32,8 @@ const float PLAYER_OFFSET_Y = 150.0f;
 const float PLAYER_OFFSET_X = 50.0f;
 // Initial velocity of the player paddle
 const float PLAYER_VELOCITY(500.0f);
+
+const glm::vec2 PROJECTILE_SIZE(6.0f, 6.0f);
 //// Initial velocity of the Ball
 //const glm::vec2 INITIAL_BALL_VELOCITY(100.0f, -350.0f);
 // Radius of the ball object

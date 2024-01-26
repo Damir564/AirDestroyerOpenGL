@@ -1,4 +1,5 @@
 #include "color_renderer.h"
+#include <iostream>
 
 
 ColorRenderer::ColorRenderer(Shader& shader, float r, float g, float b)
@@ -12,7 +13,7 @@ ColorRenderer::~ColorRenderer()
     glDeleteVertexArrays(1, &this->quadVAO);
 }
 
-void ColorRenderer::DrawColor(glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color)
+void ColorRenderer::DrawColor(glm::vec2 position, glm::vec2 size, float rotate)
 {
     // prepare transformations
     this->shader.Use();
@@ -54,19 +55,15 @@ void ColorRenderer::initRenderData(float r, float g, float b)
     };
 
     glGenVertexArrays(1, &this->quadVAO);
+    glBindVertexArray(this->quadVAO);
     glGenBuffers(1, &VBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindVertexArray(this->quadVAO);
-    // coord
-    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-    // color
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)2);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }

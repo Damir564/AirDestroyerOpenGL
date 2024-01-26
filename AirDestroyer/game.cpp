@@ -3,12 +3,14 @@
 #include "utilities/sprite_renderer.h"
 #include "utilities/color_renderer.h"
 #include "game_object.h"
+#include "projectile_object.h"
 #include <iostream>
 
 // Game-related State data
 SpriteRenderer* Renderer;
 ColorRenderer* colorRenderer;
 GameObject* Player;
+ProjectileObject* Projectile;
 
 Game::Game(unsigned int width, unsigned int height) : Keys(), KeysProcessed(), Width(width), Height(height)
 {
@@ -32,6 +34,9 @@ void Game::Init()
     ResourceManager::GetShader("color").SetMatrix4("projection", projection);
 
     Shader shader = ResourceManager::GetShader("sprite");
+
+    ResourceManager::GetShader("color").Use();
+    ResourceManager::GetShader("color").SetMatrix4("projection", projection);
     Shader colorShader = ResourceManager::GetShader("color");
 
     Renderer = new SpriteRenderer(shader);
@@ -39,6 +44,8 @@ void Game::Init()
 
     glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
     Player = new GameObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"));
+    glm::vec2 projectilePos = glm::vec2(this->Width / 2.0f - PROJECTILE_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y - PROJECTILE_SIZE.y);
+    Projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
     // this->ResetPlayer();
 }
 
@@ -77,16 +84,20 @@ void Game::ProcessInput(float dt)
 void Game::Fire()
 {
     std::cout << "Piu" << std::endl;
+    glm::vec2 projectilePos = glm::vec2(Player->Position.x + 20.0f, Player->Position.y);
+    Projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
 }
 
 void Game::Update(float dt)
 {
+    Projectile->Move(dt);
 }
 
 void Game::Render()
 {
     // draw player
     Player->Draw(*Renderer);
+    Projectile->Draw(*colorRenderer);
 }
 
 void Game::ResetPlayer()
