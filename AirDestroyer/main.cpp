@@ -14,9 +14,9 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    #ifdef __APPLE__
+#ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    #endif
+#endif
     glfwWindowHint(GLFW_RESIZABLE, false);
 
 
@@ -43,29 +43,11 @@ int main()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.0f,  0.5f, 0.0f
-    };
 
-    unsigned int VBO, VAO;
-    // OnLoad
-    //------------------------------------------------------------------------
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    game.Init();
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
     // render loop
     while (!glfwWindowShouldClose(window))
     {
@@ -80,10 +62,7 @@ int main()
 
         glClearColor(0.184f, 0.196f, 0.714f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        ourShader.use();
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        game.Render();
 
         glfwSwapBuffers(window);
     }
@@ -106,7 +85,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     // when a user presses the escape key, we set the WindowShouldClose property to true, closing the application
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    if (key >= 0 && key < 1024) 
+    if (key >= 0 && key < 1024)
     {
         if (action == GLFW_PRESS)
             game.Keys[key] = true;
