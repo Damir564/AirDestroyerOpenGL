@@ -73,6 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(ProjectDir)\sdk\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\sdk\libraries\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\sdk\include;$(ProjectDir)\utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
     </ClCompile>
@@ -135,16 +136,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="game_object.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="game.cpp" />
+    <ClCompile Include="utilities\color_renderer.cpp" />
+    <ClCompile Include="utilities\resource_manager.cpp" />
+    <ClCompile Include="utilities\shader.cpp" />
+    <ClCompile Include="utilities\sprite_renderer.cpp" />
+    <ClCompile Include="utilities\stb_image.cpp" />
+    <ClCompile Include="utilities\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="game_object.h" />
     <ClInclude Include="Header.h" />
-    <ClInclude Include="shader_s.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="utilities\color_renderer.h" />
+    <ClInclude Include="utilities\resource_manager.h" />
+    <ClInclude Include="utilities\shader.h" />
+    <ClInclude Include="utilities\sprite_renderer.h" />
+    <ClInclude Include="utilities\stb_image.h" />
+    <ClInclude Include="utilities\texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />
     <None Include="shader.vert" />
+    <None Include="shaders\color.frag" />
+    <None Include="shaders\color.vert" />
+    <None Include="shaders\sprite.frag" />
+    <None Include="shaders\sprite.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\textures\airplane.png" />
+    <Image Include="resources\textures\airplane_left.png" />
+    <Image Include="resources\textures\airplane_right.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
