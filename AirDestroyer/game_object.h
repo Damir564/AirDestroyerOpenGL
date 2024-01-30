@@ -3,9 +3,9 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include "texture.h"
-#include "sprite_renderer.h"
-#include "color_renderer.h"
+#include "utilities/texture.h"
+#include "utilities/sprite_renderer.h"
+#include "utilities/color_renderer.h"
 
 
 // Container object for holding all state relevant for a single

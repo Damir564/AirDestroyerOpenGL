@@ -1,8 +1,4 @@
-#include "Header.h"
-#include "utilities/shader.h"
-#include <iostream>
-#include "game.h"
-#include "utilities/resource_manager.h"
+#include "program.h"
 
 Game game(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -48,12 +44,15 @@ int main()
 
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
+    Game::SetFirstTime((float)glfwGetTime());
+    Program::PrintFloat(Game::GetFirstTime());
     // render loop
     while (!glfwWindowShouldClose(window))
     {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+        // Program::PrintFloat(currentFrame - firstFrame);
         glfwPollEvents();
 
         game.ProcessInput(deltaTime);
@@ -65,6 +64,8 @@ int main()
         game.Render();
 
         glfwSwapBuffers(window);
+
+        game.Dispose();
     }
 
     ResourceManager::Clear();
@@ -85,15 +86,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     // when a user presses the escape key, we set the WindowShouldClose property to true, closing the application
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    if (key >= 0 && key < 1024) 
+    if (key >= 0 && key < 1024)
     {
         if (action == GLFW_PRESS)
             game.Keys[key] = true;
         else if (action == GLFW_RELEASE)
+        {
             game.Keys[key] = false;
-
-        if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-            game.Fire();
+            game.KeysProcessed[key] = false;
+        }
     }
 }
 
@@ -103,4 +104,14 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+}
+
+void Program::PrintFloat(float value)
+{
+    std::cout << value << std::endl;
+}
+
+void Program::PrintString(std::string str)
+{
+    std::cout << str << std::endl;
 }
