@@ -1,13 +1,17 @@
 #pragma once
-#include <vector>
-#include <tuple>
-
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include "enemy_object.h"
-
+#include <vector>
+#include <tuple>
+#include <iostream>
+#include "program.h"
+#include "utilities/resource_manager.h"
+#include "utilities/sprite_renderer.h"
+#include "utilities/color_renderer.h"
+// #include "game_object.h"
+#include "player_object.h"
+#include "projectile_object.h"
 //#include "game_level.h"
 //#include "power_up.h"
 
@@ -47,6 +51,8 @@ const glm::vec2 PROJECTILE_SIZE(6.0f, 6.0f);
 class Game
 {
 public:
+	static void SetFirstTime(float value);
+	static float GetFirstTime();
     // game state
     //GameState               State;
     bool                    Keys[1024];
@@ -66,6 +72,7 @@ public:
     void Fire();
     void Update(float dt);
     void Render();
+    void Dispose();
     //void DoCollisions();
     // reset
     //void ResetLevel();
@@ -73,4 +80,6 @@ public:
     // powerups
     //void SpawnPowerUps(GameObject& block);
     //void UpdatePowerUps(float dt);
+private:
+    static float firstFrame;
 };

@@ -1,22 +1,27 @@
 #include "game.h"
-#include "utilities/resource_manager.h"
-#include "utilities/sprite_renderer.h"
-#include "utilities/color_renderer.h"
-#include "game_object.h"
-#include "projectile_object.h"
-#include <iostream>
 
-#include <math.h>
-#include <vector>
-#include <memory>
+
+//Instantiate static variables
+float Game::firstFrame;
 
 // Game-related State data
 SpriteRenderer* Renderer;
 ColorRenderer* colorRenderer;
-GameObject* Player;
-ProjectileObject* Projectile;
-EnemyObject* Enemy;
+//ProjectileObject* Projectile;
+std::vector<ProjectileObject*> Projectiles;
+PlayerObject* Player;
 
+//float timer = 0.5f;
+
+void Game::SetFirstTime(float value)
+{
+    Game::firstFrame = value;
+}
+
+float Game::GetFirstTime()
+{
+    return Game::firstFrame;
+}
 Game::Game(unsigned int width, unsigned int height) : Keys(), KeysProcessed(), Width(width), Height(height)
 {
 	
@@ -35,7 +40,6 @@ void Game::Init()
     ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
     ResourceManager::LoadTexture("resources/textures/airplane.png", true, "player");
-    ResourceManager::LoadTexture("resources/textures/airplane.png", true, "enemy");
 
     ResourceManager::GetShader("color").SetMatrix4("projection", projection);
 
@@ -48,73 +52,98 @@ void Game::Init()
     Renderer = new SpriteRenderer(shader);
     colorRenderer = new ColorRenderer(colorShader, 1.0f, 0.0f, 0.0f);
 
-    glm::vec2 enemyPos = glm::vec2((rand() % 6) * Width / 6, 50.0f);
-    glm::vec2 enemyPos2 = glm::vec2((rand() % 5) * Width / 5, 50.0f);
     glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
-    Player = new GameObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"));
-    Enemy = new EnemyObject(enemyPos, PLAYER_SIZE, ResourceManager::GetTexture("enemy"));
-    glm::vec2 projectilePos = glm::vec2(this->Width / 2.0f - PROJECTILE_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y - PROJECTILE_SIZE.y);
-    Projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
+    Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"));
+    // glm::vec2 projectilePos = glm::vec2(this->Width / 2.0f - PROJECTILE_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y - PROJECTILE_SIZE.y);
+    // Projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
     // this->ResetPlayer();
 }
 
 void Game::ProcessInput(float dt)
 {
-    //if (this->Keys[GLFW_KEY_W] && !this->KeysProcessed[GLFW_KEY_W])
-    //{
-    //    std::cout << "W pressed" << std::endl;
-    //    this->KeysProcessed[GLFW_KEY_W] = true;
-    //}
     float velocity = PLAYER_VELOCITY * dt;
     // move playerboard
     if (this->Keys[GLFW_KEY_A])
     {
         if (Player->Position.x >= PLAYER_OFFSET_X)
         {
-            Player->Position.x -= velocity;
-            //if (Ball->Stuck)
-            //    Ball->Position.x -= velocity;
+            Player->Move(-velocity);
         }
     }
     if (this->Keys[GLFW_KEY_D])
     {
         if (Player->Position.x <= this->Width - Player->Size.x - PLAYER_OFFSET_X)
         {
-            Player->Position.x += velocity;
-            //if (Ball->Stuck)
-            //    Ball->Position.x += velocity;
+            Player->Move(velocity);
         }
     }
-    //if (this->Keys[GLFW_KEY_SPACE])
-    //    std::cout << "Piu" << std::endl;
-        //Ball->Stuck = false;
+    if (this->Keys[GLFW_KEY_SPACE] && !this->KeysProcessed[GLFW_KEY_SPACE])
+    {
+        this->Fire();
+        this->KeysProcessed[GLFW_KEY_SPACE] = true;
+    }
 }
 
 void Game::Fire()
 {
-    std::cout << "Piu" << std::endl;
-    glm::vec2 projectilePos = glm::vec2(Player->Position.x + 20.0f, Player->Position.y);
-    Projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
+    if (Player->CanShoot)
+    {
+        // Insert into PlayerObject class
+        std::cout << "Piu" << std::endl;
+        glm::vec2 projectilePos = glm::vec2(Player->Position.x + 20.0f, Player->Position.y);
+        // ProjectileObject* projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
+         Projectiles.push_back(new ProjectileObject(projectilePos, PROJECTILE_SIZE));
+        // Projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
+
+
+        Player->CanShoot = false;
+        Player->ShootTime = (float)glfwGetTime();
+    }
+    if ((float)glfwGetTime() - Player->ShootTime >= Player->CoolDown)
+    {
+        Player->CanShoot = true;
+    }
 }
 
 void Game::Update(float dt)
 {
-    Projectile->Move(dt);
-    Enemy->Move(dt);
-    if (Enemy->Position.y >= this->Height) {
-        srand(time(NULL));
-        const float enemyPosX = (rand() % 6) * Width / 6;
-        std::cout << enemyPosX << std::endl;
-        glm::vec2 enemyPos = glm::vec2(enemyPosX, 50.0f);
-        Enemy = new EnemyObject(enemyPos, PLAYER_SIZE, ResourceManager::GetTexture("enemy"));
+    //if (Projectile != NULL)
+    //    Projectile->Move(dt);
+    for (ProjectileObject* projectile : Projectiles)
+    {
+        projectile->Move(dt);
     }
+    //float timePastInSeconds = (float)glfwGetTime() - Game::GetFirstTime();  
+    //if (timePastInSeconds >= timer)
+    //{
+    //    std::cout << timer << " seconds past" << std::endl;
+    //    Game::SetFirstTime((float)glfwGetTime());
+    //}
 }
+
 void Game::Render()
 {
     // draw player
-    Enemy->Draw(*Renderer);
     Player->Draw(*Renderer);
-    Projectile->Draw(*colorRenderer);
+    //if (Projectile != NULL)
+    //    Projectile->Draw(*colorRenderer);
+    for (ProjectileObject* projectile : Projectiles)
+    {
+        projectile->Draw(*colorRenderer);
+    }
+}
+
+void Game::Dispose()
+{
+    for (auto it = Projectiles.begin(); it != Projectiles.end(); ) {
+        if ((*it)->isDisposable) {
+            delete* it;
+            it = Projectiles.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
 }
 
 void Game::ResetPlayer()
@@ -129,4 +158,3 @@ void Game::ResetPlayer()
     Player->Color = glm::vec3(1.0f);
     //Ball->Color = glm::vec3(1.0f);
 }
-

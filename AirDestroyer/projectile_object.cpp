@@ -1,4 +1,5 @@
 #include "projectile_object.h"
+#include <iostream>
 
 ProjectileObject::ProjectileObject() : GameObject()
 {
@@ -15,6 +16,13 @@ ProjectileObject::ProjectileObject(glm::vec2 pos, glm::vec2 size)
 glm::vec2 ProjectileObject::Move(float dt)
 {
     this->Position += this->Velocity * dt * Speed;
+
+	
+	if (this->Position.y <= 20.0f)
+	{
+		isDisposable = true;
+		std::cout << this->Position.y << std::endl;
+	}
 
 	return this->Position;
 }
