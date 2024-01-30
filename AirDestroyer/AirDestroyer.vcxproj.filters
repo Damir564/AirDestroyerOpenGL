@@ -39,6 +39,21 @@
     <ClCompile Include="utilities\sprite_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="enemy_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="projectile_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\color_renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="chunks_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h">
@@ -62,11 +77,39 @@
     <ClInclude Include="utilities\sprite_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="enemy_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="projectile_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\color_renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="chunks_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />
     <None Include="shader.vert" />
-    <None Include="shaders\shader.vert" />
-    <None Include="shaders\shader.frag" />
+    <None Include="shaders\color.frag" />
+    <None Include="shaders\color.vert" />
+    <None Include="shaders\sprite.frag" />
+    <None Include="shaders\sprite.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\textures\airplane.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\airplane_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\airplane_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

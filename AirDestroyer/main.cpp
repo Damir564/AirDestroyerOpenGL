@@ -56,12 +56,13 @@ int main()
         lastFrame = currentFrame;
         glfwPollEvents();
 
+        game.ProcessInput(deltaTime);
 
         game.Update(deltaTime);
 
-        ourShader.use();
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glClearColor(0.184f, 0.196f, 0.714f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        game.Render();
 
         glfwSwapBuffers(window);
     }

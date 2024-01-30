@@ -6,11 +6,16 @@
 #include "projectile_object.h"
 #include <iostream>
 
+#include <math.h>
+#include <vector>
+#include <memory>
+
 // Game-related State data
 SpriteRenderer* Renderer;
 ColorRenderer* colorRenderer;
 GameObject* Player;
 ProjectileObject* Projectile;
+EnemyObject* Enemy;
 
 Game::Game(unsigned int width, unsigned int height) : Keys(), KeysProcessed(), Width(width), Height(height)
 {
@@ -30,6 +35,7 @@ void Game::Init()
     ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
     ResourceManager::LoadTexture("resources/textures/airplane.png", true, "player");
+    ResourceManager::LoadTexture("resources/textures/airplane.png", true, "enemy");
 
     ResourceManager::GetShader("color").SetMatrix4("projection", projection);
 
@@ -42,8 +48,11 @@ void Game::Init()
     Renderer = new SpriteRenderer(shader);
     colorRenderer = new ColorRenderer(colorShader, 1.0f, 0.0f, 0.0f);
 
+    glm::vec2 enemyPos = glm::vec2((rand() % 6) * Width / 6, 50.0f);
+    glm::vec2 enemyPos2 = glm::vec2((rand() % 5) * Width / 5, 50.0f);
     glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
     Player = new GameObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"));
+    Enemy = new EnemyObject(enemyPos, PLAYER_SIZE, ResourceManager::GetTexture("enemy"));
     glm::vec2 projectilePos = glm::vec2(this->Width / 2.0f - PROJECTILE_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y - PROJECTILE_SIZE.y);
     Projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
     // this->ResetPlayer();
@@ -91,11 +100,19 @@ void Game::Fire()
 void Game::Update(float dt)
 {
     Projectile->Move(dt);
+    Enemy->Move(dt);
+    if (Enemy->Position.y >= this->Height) {
+        srand(time(NULL));
+        const float enemyPosX = (rand() % 6) * Width / 6;
+        std::cout << enemyPosX << std::endl;
+        glm::vec2 enemyPos = glm::vec2(enemyPosX, 50.0f);
+        Enemy = new EnemyObject(enemyPos, PLAYER_SIZE, ResourceManager::GetTexture("enemy"));
+    }
 }
-
 void Game::Render()
 {
     // draw player
+    Enemy->Draw(*Renderer);
     Player->Draw(*Renderer);
     Projectile->Draw(*colorRenderer);
 }
@@ -112,3 +129,4 @@ void Game::ResetPlayer()
     Player->Color = glm::vec3(1.0f);
     //Ball->Color = glm::vec3(1.0f);
 }
+

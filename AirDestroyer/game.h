@@ -6,6 +6,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "enemy_object.h"
+
 //#include "game_level.h"
 //#include "power_up.h"
 

@@ -136,11 +136,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="enemy_object.cpp" />
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="projectile_object.cpp" />
+    <ClCompile Include="chunks_object.cpp" />
     <ClCompile Include="utilities\color_renderer.cpp" />
     <ClCompile Include="utilities\resource_manager.cpp" />
     <ClCompile Include="utilities\shader.cpp" />
@@ -149,10 +151,12 @@
     <ClCompile Include="utilities\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="enemy_object.h" />
     <ClInclude Include="game_object.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="projectile_object.h" />
+    <ClInclude Include="chunks_object.h" />
     <ClInclude Include="utilities\color_renderer.h" />
     <ClInclude Include="utilities\resource_manager.h" />
     <ClInclude Include="utilities\shader.h" />
