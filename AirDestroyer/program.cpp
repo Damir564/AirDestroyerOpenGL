@@ -44,8 +44,8 @@ int main()
 
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
-    Game::SetFirstTime((float)glfwGetTime());
-    Program::PrintFloat(Game::GetFirstTime());
+    //Game::SetFirstTime((float)glfwGetTime());
+    //Program::PrintFloat(Game::GetFirstTime());
     // render loop
     while (!glfwWindowShouldClose(window))
     {

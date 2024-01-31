@@ -143,7 +143,6 @@
     <ClCompile Include="program.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="projectile_object.cpp" />
-    <ClCompile Include="scene.cpp" />
     <ClCompile Include="utilities\color_renderer.cpp" />
     <ClCompile Include="utilities\resource_manager.cpp" />
     <ClCompile Include="utilities\shader.cpp" />
@@ -158,7 +157,6 @@
     <ClInclude Include="player_object.h" />
     <ClInclude Include="program.h" />
     <ClInclude Include="projectile_object.h" />
-    <ClInclude Include="scene.h" />
     <ClInclude Include="utilities\color_renderer.h" />
     <ClInclude Include="utilities\resource_manager.h" />
     <ClInclude Include="utilities\shader.h" />

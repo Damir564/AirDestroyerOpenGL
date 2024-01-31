@@ -3,9 +3,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <string>
-#include "utilities/shader.h"
 #include <iostream>
 #include "game.h"
+//#include "utilities/shader.h"
 #include "utilities/resource_manager.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);

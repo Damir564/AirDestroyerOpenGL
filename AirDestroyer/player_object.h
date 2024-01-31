@@ -1,11 +1,11 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <iostream>
+//#include <glad/glad.h>
+//#include <GLFW/glfw3.h>
 //#include "game.h"
 #include "game_object.h"
+#include "game.h"
 //#include "projectile_object.h"
 //#include "texture.h"
 
@@ -25,7 +25,8 @@ public:
     // moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
     //glm::vec2 Update(float dt);
     //glm::vec2 ProcessInput(float dt, Game* game);
-    void Move(float velocity);
+    void Move(float dt, Game* game);
+    bool Shoot(Game* game, glm::vec2* projectilePos);
     // resets the ball to original state with given position and velocity
     // void      Reset(glm::vec2 position, glm::vec2 velocity);
 };
