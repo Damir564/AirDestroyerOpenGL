@@ -12,6 +12,7 @@
 // #include "game_object.h"
 #include "player_object.h"
 #include "projectile_object.h"
+#include "chunk_object.h"
 //#include "game_level.h"
 //#include "power_up.h"
 

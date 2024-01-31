@@ -10,6 +10,7 @@ ColorRenderer* colorRenderer;
 //ProjectileObject* Projectile;
 std::vector<ProjectileObject*> Projectiles;
 PlayerObject* Player;
+ChunkObject* Chunk;
 
 //float timer = 0.5f;
 
@@ -48,10 +49,11 @@ void Game::Init()
     ResourceManager::GetShader("color").Use();
     ResourceManager::GetShader("color").SetMatrix4("projection", projection);
     Shader colorShader = ResourceManager::GetShader("color");
-
+    
     Renderer = new SpriteRenderer(shader);
     colorRenderer = new ColorRenderer(colorShader, 1.0f, 0.0f, 0.0f);
 
+    Chunk = new ChunkObject();
     glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
     Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"));
     // glm::vec2 projectilePos = glm::vec2(this->Width / 2.0f - PROJECTILE_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y - PROJECTILE_SIZE.y);
@@ -113,6 +115,7 @@ void Game::Update(float dt)
     {
         projectile->Move(dt);
     }
+
     //float timePastInSeconds = (float)glfwGetTime() - Game::GetFirstTime();  
     //if (timePastInSeconds >= timer)
     //{
@@ -157,4 +160,19 @@ void Game::ResetPlayer()
     //Ball->PassThrough = Ball->Sticky = false;
     Player->Color = glm::vec3(1.0f);
     //Ball->Color = glm::vec3(1.0f);
+}
+
+void ChunkObject::Update(float dt) 
+{
+    for (EnemyObject* enemy : Enemies)
+    {
+        enemy->Move(dt);
+    }
+}
+void ChunkObject::Render() 
+{
+    for (EnemyObject* enemy : Enemies)
+    {
+        enemy->Draw(*Renderer);
+    }
 }

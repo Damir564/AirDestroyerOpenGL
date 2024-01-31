@@ -14,14 +14,14 @@ EnemyObject::EnemyObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::v
 	Velocity = glm::vec2(0.0f, 1.0f);
 }
 
-glm::vec2 EnemyObject::Move(float dt)
-{
-	this->Position += this->Velocity * dt * Speed;
-	return this->Position;
-}
-
-void EnemyObject::Reset(glm::vec2 position, glm::vec2 velocity)
-{
-	this->Position = position;
-	this->Velocity = velocity;
+//glm::vec2 EnemyObject::Move(float dt)
+//{
+//	this->Position += this->Velocity * dt * Speed;
+//	return this->Position;
+//}
+//
+//void EnemyObject::Reset(glm::vec2 position, glm::vec2 velocity)
+//{
+//	this->Position = position;
+//	this->Velocity = velocity;
 }

@@ -137,6 +137,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="border_object.cpp" />
+    <ClCompile Include="chunk_object.cpp" />
+    <ClCompile Include="enemy_object.cpp" />
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="player_object.cpp" />
@@ -153,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="border_object.h" />
+    <ClInclude Include="chunk_object.h" />
+    <ClInclude Include="enemy_object.h" />
     <ClInclude Include="game_object.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="player_object.h" />
@@ -167,6 +171,8 @@
     <ClInclude Include="utilities\texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AirDestroyer.exe" />
+    <None Include="AirDestroyer.pdb" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
     <None Include="shaders\color.frag" />

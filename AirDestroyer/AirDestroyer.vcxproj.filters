@@ -57,6 +57,12 @@
     <ClCompile Include="player_object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="chunk_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utilities\shader.h">
@@ -98,6 +104,12 @@
     <ClInclude Include="player_object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="chunk_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />
@@ -106,6 +118,8 @@
     <None Include="shaders\color.vert" />
     <None Include="shaders\sprite.frag" />
     <None Include="shaders\sprite.vert" />
+    <None Include="AirDestroyer.exe" />
+    <None Include="AirDestroyer.pdb" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\airplane.png">
