@@ -18,7 +18,7 @@ glm::vec2 ProjectileObject::Move(float dt)
     this->Position += this->Velocity * dt * Speed;
 
 	
-	if (this->Position.y <= 20.0f)
+	if (this->Position.y <= 0.0f)
 	{
 		isDisposable = true;
 		std::cout << this->Position.y << std::endl;

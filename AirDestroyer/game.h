@@ -3,15 +3,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <vector>
-#include <tuple>
+//#include <tuple>
 #include <iostream>
-#include "program.h"
-#include "utilities/resource_manager.h"
-#include "utilities/sprite_renderer.h"
-#include "utilities/color_renderer.h"
 // #include "game_object.h"
-#include "player_object.h"
-#include "projectile_object.h"
+//#include "program.h"
 //#include "game_level.h"
 //#include "power_up.h"
 
@@ -37,7 +32,8 @@ const glm::vec2 PLAYER_SIZE(50.0f, 45.0f);
 const float PLAYER_OFFSET_Y = 150.0f;
 const float PLAYER_OFFSET_X = 50.0f;
 // Initial velocity of the player paddle
-const float PLAYER_VELOCITY(500.0f);
+// const float PLAYER_VELOCITY(500.0f);
+const glm::vec2 PLAYER_VELOCITY(500.0f, 0.0f);
 
 const glm::vec2 PROJECTILE_SIZE(6.0f, 6.0f);
 //// Initial velocity of the Ball
@@ -51,8 +47,8 @@ const glm::vec2 PROJECTILE_SIZE(6.0f, 6.0f);
 class Game
 {
 public:
-	static void SetFirstTime(float value);
-	static float GetFirstTime();
+	//static void SetFirstTime(float value);
+	//static float GetFirstTime();
     // game state
     //GameState               State;
     bool                    Keys[1024];

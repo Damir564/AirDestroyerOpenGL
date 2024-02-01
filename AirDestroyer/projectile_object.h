@@ -1,11 +1,11 @@
 #pragma once
 
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
+//#include <glad/glad.h>
+//#include <glm/glm.hpp>
 
 #include "game_object.h"
-#include "texture.h"
+//#include "texture.h"
 
 
 // BallObject holds the state of the Ball object inheriting
