@@ -1,4 +1,9 @@
 #include "game.h"
+#include "projectile_object.h"
+#include "player_object.h"
+#include "utilities/resource_manager.h"
+#include "utilities/sprite_renderer.h"
+#include "utilities/color_renderer.h"
 
 
 //Instantiate static variables
@@ -14,15 +19,16 @@ ChunkObject* Chunk;
 
 //float timer = 0.5f;
 
-void Game::SetFirstTime(float value)
-{
-    Game::firstFrame = value;
-}
+//void Game::SetFirstTime(float value)
+//{
+//    Game::firstFrame = value;
+//}
+//
+//float Game::GetFirstTime()
+//{
+//    return Game::firstFrame;
+//}
 
-float Game::GetFirstTime()
-{
-    return Game::firstFrame;
-}
 Game::Game(unsigned int width, unsigned int height) : Keys(), KeysProcessed(), Width(width), Height(height)
 {
 	
@@ -55,7 +61,7 @@ void Game::Init()
 
     Chunk = new ChunkObject();
     glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
-    Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"));
+    Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"), glm::vec3(1.0f), PLAYER_VELOCITY);
     // glm::vec2 projectilePos = glm::vec2(this->Width / 2.0f - PROJECTILE_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y - PROJECTILE_SIZE.y);
     // Projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
     // this->ResetPlayer();
@@ -63,21 +69,11 @@ void Game::Init()
 
 void Game::ProcessInput(float dt)
 {
-    float velocity = PLAYER_VELOCITY * dt;
+    // float velocity = PLAYER_VELOCITY * dt;
     // move playerboard
-    if (this->Keys[GLFW_KEY_A])
+    if (this->Keys[GLFW_KEY_A] || this->Keys[GLFW_KEY_D])
     {
-        if (Player->Position.x >= PLAYER_OFFSET_X)
-        {
-            Player->Move(-velocity);
-        }
-    }
-    if (this->Keys[GLFW_KEY_D])
-    {
-        if (Player->Position.x <= this->Width - Player->Size.x - PLAYER_OFFSET_X)
-        {
-            Player->Move(velocity);
-        }
+        Player->Move(dt, this);
     }
     if (this->Keys[GLFW_KEY_SPACE] && !this->KeysProcessed[GLFW_KEY_SPACE])
     {
@@ -88,40 +84,19 @@ void Game::ProcessInput(float dt)
 
 void Game::Fire()
 {
-    if (Player->CanShoot)
+    glm::vec2 projectilePos;
+    if (Player->Shoot(this, &projectilePos))
     {
-        // Insert into PlayerObject class
-        std::cout << "Piu" << std::endl;
-        glm::vec2 projectilePos = glm::vec2(Player->Position.x + 20.0f, Player->Position.y);
-        // ProjectileObject* projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
          Projectiles.push_back(new ProjectileObject(projectilePos, PROJECTILE_SIZE));
-        // Projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
-
-
-        Player->CanShoot = false;
-        Player->ShootTime = (float)glfwGetTime();
-    }
-    if ((float)glfwGetTime() - Player->ShootTime >= Player->CoolDown)
-    {
-        Player->CanShoot = true;
     }
 }
 
 void Game::Update(float dt)
 {
-    //if (Projectile != NULL)
-    //    Projectile->Move(dt);
     for (ProjectileObject* projectile : Projectiles)
     {
         projectile->Move(dt);
     }
-
-    //float timePastInSeconds = (float)glfwGetTime() - Game::GetFirstTime();  
-    //if (timePastInSeconds >= timer)
-    //{
-    //    std::cout << timer << " seconds past" << std::endl;
-    //    Game::SetFirstTime((float)glfwGetTime());
-    //}
 }
 
 void Game::Render()
