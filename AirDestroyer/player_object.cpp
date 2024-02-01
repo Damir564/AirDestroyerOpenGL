@@ -8,26 +8,26 @@ PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm:
     : GameObject(pos, size, sprite, color, velocity), CanShoot(true)
 { }
 
-void PlayerObject::Move(float dt, Game* game)
+void PlayerObject::Move(float dt, Game& game)
 {
     
-    if (game->Keys[GLFW_KEY_A])
+    if (game.Keys[GLFW_KEY_A])
     {
         if (Position.x >= PLAYER_OFFSET_X)
         {
             Position.x -= Velocity.x * dt;
         }
     }
-    if (game->Keys[GLFW_KEY_D])
+    if (game.Keys[GLFW_KEY_D])
     {
-        if (Position.x <= game->Width - Size.x - PLAYER_OFFSET_X)
+        if (Position.x <= game.Width - Size.x - PLAYER_OFFSET_X)
         {
             Position.x += Velocity.x * dt;
         }
     }
 }
 
-bool PlayerObject::Shoot(Game* game, glm::vec2* projectilePos)
+bool PlayerObject::Shoot(glm::vec2& projectilePos)
 {
     if (CanShoot)
     {
@@ -37,7 +37,7 @@ bool PlayerObject::Shoot(Game* game, glm::vec2* projectilePos)
         CanShoot = false;
         ShootTime = (float)glfwGetTime();
 
-        *projectilePos = glm::vec2(Position.x + 20.0f, Position.y);
+        projectilePos = glm::vec2(Position.x + 20.0f, Position.y);
 
         return true;
     }

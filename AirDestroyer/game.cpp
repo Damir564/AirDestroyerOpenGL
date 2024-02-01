@@ -15,8 +15,9 @@ SpriteRenderer* Renderer;
 ColorRenderer* colorRenderer;
 //ProjectileObject* Projectile;
 std::vector<ProjectileObject*> Projectiles;
+std::vector<ChunkObject*> Chunks;
 PlayerObject* Player;
-ChunkObject* Chunk;
+// ChunkObject* Chunk;
 
 //float timer = 0.5f;
 
@@ -48,6 +49,7 @@ void Game::Init()
     ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
     ResourceManager::LoadTexture("resources/textures/airplane.png", true, "player");
+    ResourceManager::LoadTexture("resources/textures/ship.png", true, "ship");
 
     ResourceManager::GetShader("color").SetMatrix4("projection", projection);
 
@@ -60,7 +62,7 @@ void Game::Init()
     Renderer = new SpriteRenderer(shader);
     colorRenderer = new ColorRenderer(colorShader, 1.0f, 0.0f, 0.0f);
 
-    Chunk = new ChunkObject();
+    Chunks.push_back(new ChunkObject(-(float)Height));
     glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
     Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"), glm::vec3(1.0f), PLAYER_VELOCITY);
     // glm::vec2 projectilePos = glm::vec2(this->Width / 2.0f - PROJECTILE_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y - PROJECTILE_SIZE.y);
@@ -74,7 +76,7 @@ void Game::ProcessInput(float dt)
     // move playerboard
     if (this->Keys[GLFW_KEY_A] || this->Keys[GLFW_KEY_D])
     {
-        Player->Move(dt, this);
+        Player->Move(dt, *this);
     }
     if (this->Keys[GLFW_KEY_SPACE] && !this->KeysProcessed[GLFW_KEY_SPACE])
     {
@@ -86,16 +88,20 @@ void Game::ProcessInput(float dt)
 void Game::Fire()
 {
     glm::vec2 projectilePos;
-    if (Player->Shoot(this, &projectilePos))
+    if (Player->Shoot(projectilePos))
     {
-         Projectiles.push_back(new ProjectileObject(projectilePos, PROJECTILE_SIZE));
+         Projectiles.push_back(new ProjectileObject(projectilePos, PROJECTILE_SIZE, PROJECTILE_VELOCITY));
     }
 }
 
 void Game::Update(float dt)
 {
-    Chunk->Move(dt);
-
+    if (Chunks.empty())
+        Chunks.push_back(new ChunkObject(-(float)Height));
+    for (ChunkObject* chunk : Chunks)
+    {
+        chunk->Move(dt);
+    }
     for (ProjectileObject* projectile : Projectiles)
     {
         projectile->Move(dt);
@@ -103,9 +109,11 @@ void Game::Update(float dt)
 }
 
 void Game::Render()
-{
-    Chunk->Draw(*Renderer);
-    // draw player
+{ 
+    for (ChunkObject* chunk : Chunks)
+    {
+        chunk->Draw(*Renderer);
+    }
     Player->Draw(*Renderer);
     //if (Projectile != NULL)
     //    Projectile->Draw(*colorRenderer);
@@ -118,9 +126,18 @@ void Game::Render()
 void Game::Dispose()
 {
     for (auto it = Projectiles.begin(); it != Projectiles.end(); ) {
-        if ((*it)->isDisposable) {
+        if ((*it)->IsDisposable) {
             delete* it;
             it = Projectiles.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+    for (auto it = Chunks.begin(); it != Chunks.end(); ) {
+        if ((*it)->IsDisposable) {
+            delete* it;
+            it = Chunks.erase(it);
         }
         else {
             ++it;

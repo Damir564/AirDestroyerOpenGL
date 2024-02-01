@@ -180,6 +180,7 @@
     <Image Include="resources\textures\airplane.png" />
     <Image Include="resources\textures\airplane_left.png" />
     <Image Include="resources\textures\airplane_right.png" />
+    <Image Include="resources\textures\ship.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

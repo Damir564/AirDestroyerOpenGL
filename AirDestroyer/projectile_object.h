@@ -19,11 +19,11 @@ public:
     //float   Radius;
     //bool    Stuck;
     //bool    Sticky, PassThrough;
-    float Speed = 400.0f;
-    bool isDisposable = false;
+    // float Speed = 400.0f;
+    bool IsDisposable = false;
     // constructor(s)
     ProjectileObject();
-    ProjectileObject(glm::vec2 pos, glm::vec2 size);
+    ProjectileObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity);
     // moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
     glm::vec2 Move(float dt);
     // resets the ball to original state with given position and velocity

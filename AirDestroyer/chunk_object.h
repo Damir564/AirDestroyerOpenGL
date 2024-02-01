@@ -14,19 +14,12 @@
 class ChunkObject
 {
 public:
-    // object state
-    glm::vec2   Position, Size, Velocity;
+    glm::vec2   Position;
     bool        IsSolid;
-    bool        Destroyed;
+    bool        IsDisposable;
     std::vector<EnemyObject*> Enemies;
-    
 
-    
-    // constructor(s)
-    ChunkObject();
-    ChunkObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity = glm::vec2(0.0f, 0.0f));
+    ChunkObject(float startHeight);
     void Move(float dt);
     void Draw(SpriteRenderer& renderer);
-    // draw sprite
-    
 };

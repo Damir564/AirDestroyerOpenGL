@@ -5,18 +5,18 @@ EnemyObject::EnemyObject() : GameObject()
 {
 }
 
-EnemyObject::EnemyObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 color, glm::vec2 velocity )
-	: GameObject()
+EnemyObject::EnemyObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 color, glm::vec2 velocity)
+	: GameObject(pos, size, sprite, color, velocity)
 {
-	Position = pos;
-	Size = size;
-	Sprite = sprite;
-	Velocity = glm::vec2(0.0f, 1.0f);
+	//Position = pos;
+	//Size = size;
+	//Sprite = sprite;
+	//Velocity = glm::vec2(0.0f, 1.0f);
 }
 
 glm::vec2 EnemyObject::Move(float dt)
 {
-	this->Position += this->Velocity * dt * Speed;
+	this->Position.y += dt * Velocity.y;
 	return this->Position;
 }
 

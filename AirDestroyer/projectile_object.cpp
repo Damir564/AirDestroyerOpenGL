@@ -5,22 +5,22 @@ ProjectileObject::ProjectileObject() : GameObject()
 {
 }
 
-ProjectileObject::ProjectileObject(glm::vec2 pos, glm::vec2 size)
+ProjectileObject::ProjectileObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity)
 	: GameObject()
 {
 	Position = pos;
 	Size = size;
-	Velocity = glm::vec2(0.0f, -1.0f);
+	Velocity = velocity;
 }
 
 glm::vec2 ProjectileObject::Move(float dt)
 {
-    this->Position += this->Velocity * dt * Speed;
+    this->Position.y += this->Velocity.y * dt;
 
 	
 	if (this->Position.y <= 0.0f)
 	{
-		isDisposable = true;
+		IsDisposable = true;
 		std::cout << this->Position.y << std::endl;
 	}
 
