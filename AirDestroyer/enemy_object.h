@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "game_object.h"
 
 class EnemyObject : public GameObject

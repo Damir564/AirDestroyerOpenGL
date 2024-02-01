@@ -1,6 +1,7 @@
 #include "game.h"
 #include "projectile_object.h"
 #include "player_object.h"
+#include "chunk_object.h"
 #include "utilities/resource_manager.h"
 #include "utilities/sprite_renderer.h"
 #include "utilities/color_renderer.h"
@@ -93,6 +94,8 @@ void Game::Fire()
 
 void Game::Update(float dt)
 {
+    Chunk->Move(dt);
+
     for (ProjectileObject* projectile : Projectiles)
     {
         projectile->Move(dt);
@@ -101,6 +104,7 @@ void Game::Update(float dt)
 
 void Game::Render()
 {
+    Chunk->Draw(*Renderer);
     // draw player
     Player->Draw(*Renderer);
     //if (Projectile != NULL)
@@ -135,19 +139,4 @@ void Game::ResetPlayer()
     //Ball->PassThrough = Ball->Sticky = false;
     Player->Color = glm::vec3(1.0f);
     //Ball->Color = glm::vec3(1.0f);
-}
-
-void ChunkObject::Update(float dt) 
-{
-    for (EnemyObject* enemy : Enemies)
-    {
-        enemy->Move(dt);
-    }
-}
-void ChunkObject::Render() 
-{
-    for (EnemyObject* enemy : Enemies)
-    {
-        enemy->Draw(*Renderer);
-    }
 }

@@ -169,8 +169,6 @@
     <ClInclude Include="utilities\texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AirDestroyer.exe" />
-    <None Include="AirDestroyer.pdb" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
     <None Include="shaders\color.frag" />

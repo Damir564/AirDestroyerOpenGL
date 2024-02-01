@@ -1,4 +1,5 @@
 #include "chunk_object.h"
+#include "game.h"
 
 
 ChunkObject::ChunkObject()
@@ -10,7 +11,7 @@ ChunkObject::ChunkObject()
 ChunkObject::ChunkObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity)
     : Position(pos), Size(size), Velocity(velocity), IsSolid(false), Destroyed(false) { }
 
-void ChunkObject::Update(float dt)
+void ChunkObject::Move(float dt)
 {
     for (EnemyObject* enemy : Enemies)
     {
@@ -18,11 +19,11 @@ void ChunkObject::Update(float dt)
     }
 }
 
-void ChunkObject::Render()
+void ChunkObject::Draw(SpriteRenderer& renderer)
 {
     for (EnemyObject* enemy : Enemies)
     {
-        enemy->Draw(*Renderer);
+        enemy->Draw(renderer);
     }
 }
 
