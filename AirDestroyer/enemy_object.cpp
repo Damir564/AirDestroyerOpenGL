@@ -14,9 +14,9 @@ EnemyObject::EnemyObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::v
 	//Velocity = glm::vec2(0.0f, 1.0f);
 }
 
-glm::vec2 EnemyObject::Move(float dt)
+glm::vec2 EnemyObject::Move(float dt, glm::vec2 parentVelocity)
 {
-	this->Position.y += dt * Velocity.y;
+	this->Position.y += dt * (parentVelocity.y + this->Velocity.y);
 	return this->Position;
 }
 

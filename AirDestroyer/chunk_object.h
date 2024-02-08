@@ -14,12 +14,17 @@
 class ChunkObject
 {
 public:
-    glm::vec2   Position;
-    bool        IsSolid;
-    bool        IsDisposable;
+    //glm::vec2   Position;
+    //bool        IsSolid;
     std::vector<EnemyObject*> Enemies;
 
-    ChunkObject(float startHeight);
+    // ChunkObject(float startHeight);
+    ChunkObject(int width, int height, int number);
     void Move(float dt);
     void Draw(SpriteRenderer& renderer);
+
+    bool IsDisposable() { return _isDisposable; }
+private:
+    bool _isDisposable;
+    float _offset;
 };

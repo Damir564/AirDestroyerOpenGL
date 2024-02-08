@@ -14,7 +14,7 @@ public:
     EnemyObject();
     EnemyObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 color = glm::vec3(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f));
     // moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
-    glm::vec2 Move(float dt);
+    glm::vec2 Move(float dt, glm::vec2 parentVelocity = glm::vec2{0.0f});
     // resets the ball to original state with given position and velocity
     void      Reset(glm::vec2 position, glm::vec2 velocity);
 };

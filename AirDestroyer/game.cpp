@@ -11,11 +11,12 @@
 float Game::firstFrame;
 
 // Game-related State data
-SpriteRenderer* Renderer;
+SpriteRenderer* spriteRenderer;
 ColorRenderer* colorRenderer;
 //ProjectileObject* Projectile;
 std::vector<ProjectileObject*> Projectiles;
 std::vector<ChunkObject*> Chunks;
+const int CHUNKS_AMOUNT_BUFFER = 8;
 PlayerObject* Player;
 // ChunkObject* Chunk;
 
@@ -40,34 +41,61 @@ Game::~Game()
 {
 }
 
-void Game::Init()
+void Game::GenerateChunks()
 {
-    ResourceManager::LoadShader("shaders/sprite.vert", "shaders/sprite.frag", nullptr, "sprite");
-    ResourceManager::LoadShader("shaders/color.vert", "shaders/color.frag", nullptr, "color");
-    // configure shaders
-    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width), static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
-    ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
-    ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+    std::cout << "Chunks generated" << std::endl;
+    for (int i = 0; i != CHUNKS_AMOUNT_BUFFER; ++i)
+    {
+        CreateChunk(i);
+    }
+}
+
+void Game::CreateChunk(int n)
+{
+    Chunks.push_back(new ChunkObject(Width, Height, n));
+}
+
+void Game::CreatePlayer()
+{
+    glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
+    Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"), glm::vec3(1.0f), PLAYER_VELOCITY);
+}
+
+void Game::LoadTextures()
+{
     ResourceManager::LoadTexture("resources/textures/airplane.png", true, "player");
     ResourceManager::LoadTexture("resources/textures/ship.png", true, "ship");
+}
 
-    ResourceManager::GetShader("color").SetMatrix4("projection", projection);
-
+void Game::CreateSpriteRenderer()
+{
+    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width), static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
+    ResourceManager::LoadShader("shaders/sprite.vert", "shaders/sprite.frag", nullptr, "sprite");
+    ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
+    ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
     Shader shader = ResourceManager::GetShader("sprite");
+    spriteRenderer = new SpriteRenderer(shader);
+}
 
+void Game::CreateColorRenderer()
+{
+    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width), static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
+    ResourceManager::LoadShader("shaders/color.vert", "shaders/color.frag", nullptr, "color");
     ResourceManager::GetShader("color").Use();
     ResourceManager::GetShader("color").SetMatrix4("projection", projection);
     Shader colorShader = ResourceManager::GetShader("color");
-    
-    Renderer = new SpriteRenderer(shader);
     colorRenderer = new ColorRenderer(colorShader, 1.0f, 0.0f, 0.0f);
+}
 
-    Chunks.push_back(new ChunkObject(-(float)Height));
-    glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
-    Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"), glm::vec3(1.0f), PLAYER_VELOCITY);
-    // glm::vec2 projectilePos = glm::vec2(this->Width / 2.0f - PROJECTILE_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y - PROJECTILE_SIZE.y);
-    // Projectile = new ProjectileObject(projectilePos, PROJECTILE_SIZE);
-    // this->ResetPlayer();
+
+void Game::Init()
+{
+    this->CreateSpriteRenderer();
+    this->CreateColorRenderer();
+    this->LoadTextures();
+
+    this->GenerateChunks();   
+    this->CreatePlayer();
 }
 
 void Game::ProcessInput(float dt)
@@ -76,7 +104,7 @@ void Game::ProcessInput(float dt)
     // move playerboard
     if (this->Keys[GLFW_KEY_A] || this->Keys[GLFW_KEY_D])
     {
-        Player->Move(dt, *this);
+        Player->Turn(dt, *this);
     }
     if (this->Keys[GLFW_KEY_SPACE] && !this->KeysProcessed[GLFW_KEY_SPACE])
     {
@@ -96,8 +124,8 @@ void Game::Fire()
 
 void Game::Update(float dt)
 {
-    if (Chunks.empty())
-        Chunks.push_back(new ChunkObject(-(float)Height));
+    if (Chunks.size() == 1)
+        this->GenerateChunks();
     for (ChunkObject* chunk : Chunks)
     {
         chunk->Move(dt);
@@ -112,9 +140,9 @@ void Game::Render()
 { 
     for (ChunkObject* chunk : Chunks)
     {
-        chunk->Draw(*Renderer);
+        chunk->Draw(*spriteRenderer);
     }
-    Player->Draw(*Renderer);
+    Player->Draw(*spriteRenderer);
     //if (Projectile != NULL)
     //    Projectile->Draw(*colorRenderer);
     for (ProjectileObject* projectile : Projectiles)
@@ -135,7 +163,7 @@ void Game::Dispose()
         }
     }
     for (auto it = Chunks.begin(); it != Chunks.end(); ) {
-        if ((*it)->IsDisposable) {
+        if ((*it)->IsDisposable()) {
             delete* it;
             it = Chunks.erase(it);
         }

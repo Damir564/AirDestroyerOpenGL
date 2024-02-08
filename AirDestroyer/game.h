@@ -31,7 +31,7 @@
 const glm::vec2 PLAYER_SIZE(50.0f, 45.0f);
 const float PLAYER_OFFSET_Y = 150.0f;
 const float PLAYER_OFFSET_X = 50.0f;
-const glm::vec2 PLAYER_VELOCITY(300.0f, 0.0f);
+const glm::vec2 PLAYER_VELOCITY(300.0f, 200.0f);
 
 const glm::vec2 PROJECTILE_SIZE(6.0f, 6.0f);
 const glm::vec2 PROJECTILE_VELOCITY(0.0f, -300.0f);
@@ -83,4 +83,12 @@ public:
     //void UpdatePowerUps(float dt);
 private:
     static float firstFrame;
+    void GenerateChunks();
+    void CreateChunk(int n);
+
+    void CreatePlayer();
+
+    void CreateSpriteRenderer();
+    void LoadTextures();
+    void CreateColorRenderer();
 };

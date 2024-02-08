@@ -8,7 +8,7 @@ PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm:
     : GameObject(pos, size, sprite, color, velocity), CanShoot(true)
 { }
 
-void PlayerObject::Move(float dt, Game& game)
+void PlayerObject::Turn(float dt, Game& game)
 {
     
     if (game.Keys[GLFW_KEY_A])
