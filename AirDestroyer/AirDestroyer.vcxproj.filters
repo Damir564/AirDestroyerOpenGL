@@ -112,8 +112,6 @@
     <None Include="shaders\color.vert" />
     <None Include="shaders\sprite.frag" />
     <None Include="shaders\sprite.vert" />
-    <None Include="AirDestroyer.exe" />
-    <None Include="AirDestroyer.pdb" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\airplane.png">
@@ -123,6 +121,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\textures\airplane_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\ship.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

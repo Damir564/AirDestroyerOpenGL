@@ -1,11 +1,11 @@
 #include "player_object.h"
 
 
-PlayerObject::PlayerObject() : GameObject(), CanShoot(true)
+PlayerObject::PlayerObject() : GameObject(), _canShoot(true)
 { }
 
-PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 color, glm::vec2 velocity)
-    : GameObject(pos, size, sprite, color, velocity), CanShoot(true)
+PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity, glm::vec3 color, Texture2D sprite)
+    : GameObject(pos, size, velocity, color, sprite), _canShoot(true)
 { }
 
 void PlayerObject::Turn(float dt, Game& game)
@@ -29,23 +29,24 @@ void PlayerObject::Turn(float dt, Game& game)
 
 bool PlayerObject::Shoot(glm::vec2& projectilePos)
 {
-    if (CanShoot)
+    if (_canShoot)
     {
         // Process Audio
         std::cout << "Piu" << std::endl;
 
-        CanShoot = false;
-        ShootTime = (float)glfwGetTime();
+        _canShoot = false;
+        _shootTime = (float)glfwGetTime();
 
         projectilePos = glm::vec2(Position.x + 20.0f, Position.y);
 
         return true;
     }
-    if ((float)glfwGetTime() - this->ShootTime >= CoolDown)
+    if ((float)glfwGetTime() - this->_shootTime >= _coolDown)
     {
-        CanShoot = true;
+        _canShoot = true;
 
-        return false;
+        // return false;
     }
+    return false;
 }
 

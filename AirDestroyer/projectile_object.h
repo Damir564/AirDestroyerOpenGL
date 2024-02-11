@@ -20,7 +20,7 @@ public:
     //bool    Stuck;
     //bool    Sticky, PassThrough;
     // float Speed = 400.0f;
-    bool IsDisposable = false;
+    // bool IsDisposable = false;
     // constructor(s)
     ProjectileObject();
     ProjectileObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity);

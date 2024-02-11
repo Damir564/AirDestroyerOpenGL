@@ -58,7 +58,8 @@ void Game::CreateChunk(int n)
 void Game::CreatePlayer()
 {
     glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
-    Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"), glm::vec3(1.0f), PLAYER_VELOCITY);
+    // Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"), glm::vec3(1.0f), PLAYER_VELOCITY);
+    Player = new PlayerObject(playerPos, PLAYER_SIZE, PLAYER_VELOCITY, glm::vec3(1.0f), ResourceManager::GetTexture("player"));
 }
 
 void Game::LoadTextures()
@@ -67,7 +68,7 @@ void Game::LoadTextures()
     ResourceManager::LoadTexture("resources/textures/ship.png", true, "ship");
 }
 
-void Game::CreateSpriteRenderer()
+void Game::InitSpriteRenderer()
 {
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width), static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
     ResourceManager::LoadShader("shaders/sprite.vert", "shaders/sprite.frag", nullptr, "sprite");
@@ -77,21 +78,21 @@ void Game::CreateSpriteRenderer()
     spriteRenderer = new SpriteRenderer(shader);
 }
 
-void Game::CreateColorRenderer()
+void Game::InitColorRenderer()
 {
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width), static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
     ResourceManager::LoadShader("shaders/color.vert", "shaders/color.frag", nullptr, "color");
     ResourceManager::GetShader("color").Use();
     ResourceManager::GetShader("color").SetMatrix4("projection", projection);
     Shader colorShader = ResourceManager::GetShader("color");
-    colorRenderer = new ColorRenderer(colorShader, 1.0f, 0.0f, 0.0f);
+    colorRenderer = new ColorRenderer(colorShader);
 }
 
 
 void Game::Init()
 {
-    this->CreateSpriteRenderer();
-    this->CreateColorRenderer();
+    this->InitSpriteRenderer();
+    this->InitColorRenderer();
     this->LoadTextures();
 
     this->GenerateChunks();   
@@ -140,7 +141,9 @@ void Game::Render()
 { 
     for (ChunkObject* chunk : Chunks)
     {
+        //chunk->Draw(*spriteRenderer, *colorRenderer);
         chunk->Draw(*spriteRenderer);
+        chunk->Draw(*colorRenderer);
     }
     Player->Draw(*spriteRenderer);
     //if (Projectile != NULL)
@@ -154,7 +157,7 @@ void Game::Render()
 void Game::Dispose()
 {
     for (auto it = Projectiles.begin(); it != Projectiles.end(); ) {
-        if ((*it)->IsDisposable) {
+        if ((*it)->IsDestroyed) {
             delete* it;
             it = Projectiles.erase(it);
         }
@@ -163,7 +166,7 @@ void Game::Dispose()
         }
     }
     for (auto it = Chunks.begin(); it != Chunks.end(); ) {
-        if ((*it)->IsDisposable()) {
+        if ((*it)->IsDestroyed) {
             delete* it;
             it = Chunks.erase(it);
         }

@@ -6,25 +6,31 @@
 #include <vector>
 
 #include "utilities/resource_manager.h"
-#include "sprite_renderer.h"
+#include "utilities/sprite_renderer.h"
+#include "utilities/color_renderer.h"
 #include "game_object.h"
 #include "enemy_object.h"
+#include "border_object.h"
 
 
-class ChunkObject
+class ChunkObject : public GameObject
 {
 public:
     //glm::vec2   Position;
     //bool        IsSolid;
     std::vector<EnemyObject*> Enemies;
+    std::vector<BorderObject*> Borders;
 
     // ChunkObject(float startHeight);
     ChunkObject(int width, int height, int number);
     void Move(float dt);
-    void Draw(SpriteRenderer& renderer);
+    // void Draw(SpriteRenderer& spriteRenderer, ColorRenderer& colorRenderer);
+    void Draw(SpriteRenderer& renderer) override;
+    void Draw(ColorRenderer& renderer) override;
 
-    bool IsDisposable() { return _isDisposable; }
+//    bool Destroyed() { return _destroyed; }
+//private:
+//    bool _destroyed;
 private:
-    bool _isDisposable;
     float _offset;
 };

@@ -1,28 +1,13 @@
 #include "border_object.h"
+#include "game.h"
 
-BorderObject::BorderObject() : GameObject()
-{
-	Position = glm::vec2{-1, -1};
-	Size = glm::vec2{ 1, 1 };
-}
+BorderObject::BorderObject() : GameObject() { }
 
 BorderObject::BorderObject(glm::vec2 pos, glm::vec2 size)
-	: GameObject()
-{
-	Position = pos;
-	Size = size;
-	Velocity = glm::vec2(0.0f, -1.0f);
-}
+	: GameObject(pos, size, glm::vec2{0.0f}, BORDER_COLOR) { }
 
-glm::vec2 BorderObject::Move(float dt)
+glm::vec2 BorderObject::Move(float dt, glm::vec2 parentVelocity)
 {
-    this->Position += this->Velocity * dt * Speed;
-
+	this->Position.y += dt * (parentVelocity.y + this->Velocity.y);
 	return this->Position;
-}
-
-void BorderObject::Reset(glm::vec2 position, glm::vec2 velocity)
-{
-	this->Position = position;
-	this->Velocity = velocity;
 }

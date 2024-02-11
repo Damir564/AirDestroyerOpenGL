@@ -12,16 +12,18 @@
 class PlayerObject : public GameObject
 {
 public:
-    bool CanShoot;
-    float ShootTime = 0.0f;
-    float CoolDown = 0.2f;
+    
     //float   Radius;
     //bool    Stuck;
     //bool    Sticky, PassThrough;
     // float projectileSpeed = 200.0f;
     // constructor(s)
     PlayerObject();
-    PlayerObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 color = glm::vec3(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f));
+    PlayerObject(glm::vec2 pos
+        , glm::vec2 size
+        , glm::vec2 velocity = glm::vec2(0.0f, 0.0f)
+        , glm::vec3 color = glm::vec3(1.0f)
+        , Texture2D sprite = Texture2D());
     // moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
     //glm::vec2 Update(float dt);
     //glm::vec2 ProcessInput(float dt, Game* game);
@@ -29,5 +31,9 @@ public:
     bool Shoot(glm::vec2& projectilePos);
     // resets the ball to original state with given position and velocity
     // void      Reset(glm::vec2 position, glm::vec2 velocity);
+private:
+    bool _canShoot;
+    float _shootTime = 0.0f;
+    float _coolDown = 0.2f;
 };
 

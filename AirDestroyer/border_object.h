@@ -18,13 +18,13 @@ public:
     //float   Radius;
     //bool    Stuck;
     //bool    Sticky, PassThrough;
-    float Speed = 400.0f;
+    // float Speed = 400.0f;
     // constructor(s)
     BorderObject();
     BorderObject(glm::vec2 pos, glm::vec2 size);
     // moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
-    glm::vec2 Move(float dt);
+    glm::vec2 Move(float dt, glm::vec2 parentVelocity);
     // resets the ball to original state with given position and velocity
-    void      Reset(glm::vec2 position, glm::vec2 velocity);
+    // void      Reset(glm::vec2 position, glm::vec2 velocity);
 };
 

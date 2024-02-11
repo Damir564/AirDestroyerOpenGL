@@ -32,15 +32,21 @@ const glm::vec2 PLAYER_SIZE(50.0f, 45.0f);
 const float PLAYER_OFFSET_Y = 150.0f;
 const float PLAYER_OFFSET_X = 50.0f;
 const glm::vec2 PLAYER_VELOCITY(300.0f, 200.0f);
+// const glm::vec2 PLAYER_VELOCITY(300.0f, 500.0f);
 
 const glm::vec2 PROJECTILE_SIZE(6.0f, 6.0f);
 const glm::vec2 PROJECTILE_VELOCITY(0.0f, -300.0f);
+const glm::vec3 PROJECTILE_COLOR = { 1.0f, 0.0f, 0.0f };
 
 const glm::vec2 SHIP_SIZE(100.0f, 25.0f);
+const glm::vec2 SHIP_VELOCITY(0.0f, 0.0f);
 
 // const glm::vec2 ENEMY_VELOCITY(0.0f, 200.0f);
 
-const glm::vec2 CHUNK_VELOCITY(0.0f, 200.0f);
+//const glm::vec2 CHUNK_VELOCITY(0.0f, 200.0f);
+const glm::vec2 CHUNK_VELOCITY(0.0f, 400.0f);
+
+const glm::vec3 BORDER_COLOR = { 0.333f, 0.651f, 0.220f };
 //// Initial velocity of the Ball
 //const glm::vec2 INITIAL_BALL_VELOCITY(100.0f, -350.0f);
 // Radius of the ball object
@@ -88,7 +94,7 @@ private:
 
     void CreatePlayer();
 
-    void CreateSpriteRenderer();
+    void InitSpriteRenderer();
     void LoadTextures();
-    void CreateColorRenderer();
+    void InitColorRenderer();
 };
