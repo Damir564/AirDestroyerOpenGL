@@ -28,17 +28,19 @@
 //typedef std::tuple<bool, Direction, glm::vec2> Collision; // <collision?, what direction?, difference vector center - closest point>
 
 // Initial size of the player paddle
-const glm::vec2 PLAYER_SIZE(50.0f, 45.0f);
-const float PLAYER_OFFSET_Y = 150.0f;
+const glm::vec2 PLAYER_SIZE(50.0f, 50.0f);
+const float PLAYER_OFFSET_Y = 170.0f;
 const float PLAYER_OFFSET_X = 50.0f;
+// const float PLAYER_POSITION_Y = 170.0f;
 const glm::vec2 PLAYER_VELOCITY(300.0f, 200.0f);
 // const glm::vec2 PLAYER_VELOCITY(300.0f, 500.0f);
 
-const glm::vec2 PROJECTILE_SIZE(6.0f, 6.0f);
-const glm::vec2 PROJECTILE_VELOCITY(0.0f, -300.0f);
-const glm::vec3 PROJECTILE_COLOR = { 1.0f, 0.0f, 0.0f };
+const glm::vec2 PROJECTILE_SIZE(8.0f, 30.0f);
+const glm::vec2 PROJECTILE_VELOCITY(0.0f, -1400.0f);
+const glm::vec3 PROJECTILE_COLOR = { 230.0f / 255.0f, 230.0f / 255.0f, 62.0f / 255.0f };
+// const glm::vec3 PROJECTILE_COLOR = { 250.0f / 255.0f, 0.0f / 255.0f, 62.0f / 255.0f };
 
-const glm::vec2 SHIP_SIZE(100.0f, 25.0f);
+const glm::vec2 SHIP_SIZE(120.0f, 30.0f);
 const glm::vec2 SHIP_VELOCITY(0.0f, 0.0f);
 
 // const glm::vec2 ENEMY_VELOCITY(0.0f, 200.0f);

@@ -37,7 +37,7 @@ bool PlayerObject::Shoot(glm::vec2& projectilePos)
         _canShoot = false;
         _shootTime = (float)glfwGetTime();
 
-        projectilePos = glm::vec2(Position.x + 20.0f, Position.y);
+        projectilePos = glm::vec2(Position.x + (PLAYER_SIZE.x - PROJECTILE_SIZE.x) / 2, Position.y);
 
         return true;
     }

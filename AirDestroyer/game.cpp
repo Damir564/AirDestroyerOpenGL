@@ -64,7 +64,7 @@ void Game::CreatePlayer()
 
 void Game::LoadTextures()
 {
-    ResourceManager::LoadTexture("resources/textures/airplane.png", true, "player");
+    ResourceManager::LoadTexture("resources/textures/plane.png", true, "player");
     ResourceManager::LoadTexture("resources/textures/ship.png", true, "ship");
 }
 
@@ -133,7 +133,8 @@ void Game::Update(float dt)
     }
     for (ProjectileObject* projectile : Projectiles)
     {
-        projectile->Move(dt);
+        // projectile->Move(dt);
+        projectile->Move(dt, Player->Position.x);
     }
 }
 

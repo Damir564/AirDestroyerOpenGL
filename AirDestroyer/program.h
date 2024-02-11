@@ -13,8 +13,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 //void processInput(GLFWwindow* window);
 
 
-const unsigned int SCREEN_WIDTH = 800;
-const unsigned int SCREEN_HEIGHT = 600;
+const unsigned int SCREEN_WIDTH = 1144;
+const unsigned int SCREEN_HEIGHT = 786;
 
 namespace Program
 {

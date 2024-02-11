@@ -14,7 +14,22 @@ glm::vec2 ProjectileObject::Move(float dt)
     this->Position.y += this->Velocity.y * dt;
 
 	
-	if (this->Position.y <= 0.0f)
+	if (this->Position.y <= -PROJECTILE_SIZE.y)
+	{
+		IsDestroyed = true;
+		std::cout << this->Position.y << std::endl;
+	}
+
+	return this->Position;
+}
+
+glm::vec2 ProjectileObject::Move(float dt, float playerPositionX)
+{
+	this->Position.y += this->Velocity.y * dt;
+	this->Position.x = playerPositionX + PLAYER_SIZE.x / 2;
+
+
+	if (this->Position.y < 0)
 	{
 		IsDestroyed = true;
 		std::cout << this->Position.y << std::endl;
