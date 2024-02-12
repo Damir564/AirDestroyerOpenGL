@@ -26,7 +26,7 @@ glm::vec2 ProjectileObject::Move(float dt)
 glm::vec2 ProjectileObject::Move(float dt, float playerPositionX)
 {
 	this->Position.y += this->Velocity.y * dt;
-	this->Position.x = playerPositionX + PLAYER_SIZE.x / 2;
+	this->Position.x = playerPositionX + (PLAYER_SIZE.x - PROJECTILE_SIZE.x) / 2;
 
 
 	if (this->Position.y < 0)

@@ -12,6 +12,8 @@
 #include "enemy_object.h"
 #include "border_object.h"
 
+class ProjectileObject;
+
 
 class ChunkObject : public GameObject
 {
@@ -24,10 +26,15 @@ public:
     // ChunkObject(float startHeight);
     ChunkObject(int width, int height, int number);
     void Move(float dt);
+     
     // void Draw(SpriteRenderer& spriteRenderer, ColorRenderer& colorRenderer);
     void Draw(SpriteRenderer& renderer) override;
     void Draw(ColorRenderer& renderer) override;
 
+    bool Dispose();
+
+    // Physics
+    void DoCollisions(std::vector<ProjectileObject*> projectiles);
 //    bool Destroyed() { return _destroyed; }
 //private:
 //    bool _destroyed;

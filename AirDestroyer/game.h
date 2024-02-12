@@ -37,6 +37,7 @@ const glm::vec2 PLAYER_VELOCITY(300.0f, 200.0f);
 
 const glm::vec2 PROJECTILE_SIZE(8.0f, 30.0f);
 const glm::vec2 PROJECTILE_VELOCITY(0.0f, -1400.0f);
+// const glm::vec2 PROJECTILE_VELOCITY(0.0f, -50.0f);
 const glm::vec3 PROJECTILE_COLOR = { 230.0f / 255.0f, 230.0f / 255.0f, 62.0f / 255.0f };
 // const glm::vec3 PROJECTILE_COLOR = { 250.0f / 255.0f, 0.0f / 255.0f, 62.0f / 255.0f };
 
@@ -45,18 +46,17 @@ const glm::vec2 SHIP_VELOCITY(0.0f, 0.0f);
 
 // const glm::vec2 ENEMY_VELOCITY(0.0f, 200.0f);
 
-//const glm::vec2 CHUNK_VELOCITY(0.0f, 200.0f);
+// const glm::vec2 CHUNK_VELOCITY(0.0f, 50.0f);
 const glm::vec2 CHUNK_VELOCITY(0.0f, 400.0f);
 
+const glm::vec2 BORDER_SIZE(125.0f, 0.0f);
 const glm::vec3 BORDER_COLOR = { 0.333f, 0.651f, 0.220f };
-//// Initial velocity of the Ball
-//const glm::vec2 INITIAL_BALL_VELOCITY(100.0f, -350.0f);
-// Radius of the ball object
-//const float BALL_RADIUS = 12.5f;
 
-// Game holds all game-related state and functionality.
-// Combines all game-related data into a single class for
-// easy access to each of the components and manageability.
+class ProjectileObject;
+class ChunkObject;
+class PlayerObject;
+
+
 class Game
 {
 public:
@@ -67,6 +67,10 @@ public:
     bool                    Keys[1024];
     bool                    KeysProcessed[1024];
     unsigned int            Width, Height;
+
+    std::vector<ProjectileObject*> Projectiles;
+    std::vector<ChunkObject*> Chunks;
+    PlayerObject* Player;
     //std::vector<GameLevel>  Levels;
     //std::vector<PowerUp>    PowerUps;
     //unsigned int            Level;
@@ -80,6 +84,7 @@ public:
     void ProcessInput(float dt);
     void Fire();
     void Update(float dt);
+    void DoCollisions();
     void Render();
     void Dispose();
     //void DoCollisions();

@@ -22,4 +22,11 @@ public:
     glm::vec2 Move(float dt, glm::vec2 parentVelocity = glm::vec2{0.0f});
     // resets the ball to original state with given position and velocity
     void      Reset(glm::vec2 position, glm::vec2 velocity);
+
+    // Physics part (has to implement interface or absract class for it later)
+    bool DoCollisions(GameObject* gameObject);
+    bool CheckCollision(glm::vec2 aPosition
+        , glm::vec2 aSize
+        , glm::vec2 bPosition
+        , glm::vec2 bSize);
 };

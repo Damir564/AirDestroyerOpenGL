@@ -14,10 +14,8 @@ float Game::firstFrame;
 SpriteRenderer* spriteRenderer;
 ColorRenderer* colorRenderer;
 //ProjectileObject* Projectile;
-std::vector<ProjectileObject*> Projectiles;
-std::vector<ChunkObject*> Chunks;
 const int CHUNKS_AMOUNT_BUFFER = 8;
-PlayerObject* Player;
+//PlayerObject* Player;
 // ChunkObject* Chunk;
 
 //float timer = 0.5f;
@@ -65,6 +63,7 @@ void Game::CreatePlayer()
 void Game::LoadTextures()
 {
     ResourceManager::LoadTexture("resources/textures/plane.png", true, "player");
+    //return;
     ResourceManager::LoadTexture("resources/textures/ship.png", true, "ship");
 }
 
@@ -136,6 +135,17 @@ void Game::Update(float dt)
         // projectile->Move(dt);
         projectile->Move(dt, Player->Position.x);
     }
+
+    this->DoCollisions();
+    this->Dispose();
+}
+
+void Game::DoCollisions()
+{
+    for (ChunkObject* chunk : Chunks)
+    {
+        chunk->DoCollisions(Projectiles);
+    }
 }
 
 void Game::Render()
@@ -166,8 +176,10 @@ void Game::Dispose()
             ++it;
         }
     }
+
     for (auto it = Chunks.begin(); it != Chunks.end(); ) {
-        if ((*it)->IsDestroyed) {
+        // (*it)->Dispose();
+        if ((*it)->Dispose()) {
             delete* it;
             it = Chunks.erase(it);
         }

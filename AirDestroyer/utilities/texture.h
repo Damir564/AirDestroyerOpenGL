@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <vector>
 
 class Texture2D
 {
@@ -8,6 +9,7 @@ public:
     unsigned int ID;
     // texture image dimensions
     unsigned int Width, Height; // width and height of loaded image in pixels
+    std::vector<bool> Mask;
     // texture Format
     unsigned int Internal_Format; // format of texture object
     unsigned int Image_Format; // format of loaded image

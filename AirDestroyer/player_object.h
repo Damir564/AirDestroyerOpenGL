@@ -34,6 +34,6 @@ public:
 private:
     bool _canShoot;
     float _shootTime = 0.0f;
-    float _coolDown = 0.2f;
+    float _coolDown = 0.16f;
 };
 

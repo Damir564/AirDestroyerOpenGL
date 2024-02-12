@@ -65,7 +65,7 @@ int main()
 
         glfwSwapBuffers(window);
 
-        game.Dispose();
+        
     }
 
     ResourceManager::Clear();

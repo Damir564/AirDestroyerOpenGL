@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include "projectile_object.h"
+#include "collision_manager.h"
 
 const int MIN_SHIP_AMOUNT = 1;
 const int MAX_SHIP_AMOUNT = 4;
@@ -21,7 +23,7 @@ ChunkObject::ChunkObject(int width, int height, int number)
 {
     IsDestroyed = false;
 
-    float borderSize = (float)createRandomNumber(1, 5) * 40.0f;
+    float borderSize = (float)createRandomNumber(1, 3) * BORDER_SIZE.x;
     Borders.push_back(new BorderObject(glm::vec2{ 0.0f, _offset + height}, glm::vec2{ borderSize, height }));
     Borders.push_back(new BorderObject(glm::vec2{ width - borderSize, _offset + height }, glm::vec2{ borderSize, height }));
 
@@ -71,6 +73,38 @@ void ChunkObject::Move(float dt)
     }
 }
 
+void ChunkObject::DoCollisions(std::vector<ProjectileObject*> projectiles)
+{
+    for (ProjectileObject* projectile : projectiles)
+    {
+        for (BorderObject* border : Borders)
+        {
+            if (CollisionManager::DoCollisions(border, projectile, false, false))
+            {
+                projectile->IsDestroyed = true;
+                border->IsDestroyed = true;
+                continue;
+            }
+        }
+        for (EnemyObject* enemy : Enemies)
+        {
+            //if (enemy->DoCollisions(projectile))
+            //{
+            //    projectile->IsDestroyed = true;
+            //    enemy->IsDestroyed = true;
+            //    continue;
+            //}
+            if (CollisionManager::DoCollisions(enemy, projectile, true, false))
+            {
+                projectile->IsDestroyed = true;
+                enemy->IsDestroyed = true;
+                continue;
+            }
+        }
+
+    }
+}
+
 //void ChunkObject::Draw(SpriteRenderer& spriteRenderer, ColorRenderer& colorRenderer)
 //{
 //    for (EnemyObject* enemy : Enemies)
@@ -93,6 +127,30 @@ void ChunkObject::Draw(ColorRenderer& renderer)
     {
         border->Draw(renderer);
     }
+}
+
+bool ChunkObject::Dispose()
+{
+    for (auto it = Enemies.begin(); it != Enemies.end(); ) {
+        if ((*it)->IsDestroyed) {
+            delete* it;
+            it = Enemies.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+    for (auto it = Borders.begin(); it != Borders.end(); ) {
+        if ((*it)->IsDestroyed) {
+            delete* it;
+            it = Borders.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+
+    return IsDestroyed;
 }
 
 
