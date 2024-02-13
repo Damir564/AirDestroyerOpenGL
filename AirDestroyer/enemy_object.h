@@ -24,9 +24,9 @@ public:
     void      Reset(glm::vec2 position, glm::vec2 velocity);
 
     // Physics part (has to implement interface or absract class for it later)
-    bool DoCollisions(GameObject* gameObject);
-    bool CheckCollision(glm::vec2 aPosition
-        , glm::vec2 aSize
-        , glm::vec2 bPosition
-        , glm::vec2 bSize);
+    //bool DoCollisions(GameObject* gameObject);
+    //bool CheckCollision(glm::vec2 aPosition
+    //    , glm::vec2 aSize
+    //    , glm::vec2 bPosition
+    //    , glm::vec2 bSize);
 };

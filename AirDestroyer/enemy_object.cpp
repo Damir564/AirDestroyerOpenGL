@@ -61,67 +61,67 @@ void EnemyObject::Reset(glm::vec2 position, glm::vec2 velocity)
 	this->Velocity = velocity;
 }
 
-bool EnemyObject::CheckCollision(glm::vec2 aPosition
-	, glm::vec2 aSize
-	, glm::vec2 bPosition
-	, glm::vec2 bSize)
-{
-	int aLeft, aRight, aBottom, aTop;
-	int bLeft, bRight, bBottom, bTop;
-
-	aLeft = aPosition.x; 
-	aRight = aLeft + aSize.x;
-	aBottom = aPosition.y;
-	aTop = aBottom - aSize.y;
-
-	bLeft = bPosition.x;
-	bRight = bLeft + bSize.x;
-	bBottom = bPosition.y;
-	bTop = bBottom - bSize.y;
-
-	if (aLeft > bRight || aRight < bLeft
-		|| aBottom < bTop || aTop > bBottom)
-		return false;
-
-	int left, right, bottom, top;
-	int columns, rows;
-
-	left = std::max(aLeft, bLeft);
-	right = std::min(aRight, bRight);
-	top = std::max(aTop, bTop);
-	bottom = std::min(aBottom, bBottom);
-	columns = right - left + 1;
-	rows = bottom - top + 1;
-
-	aLeft = left - aLeft;
-	aBottom = aBottom - bottom;
-
-	bLeft = left - bLeft;
-	bBottom = bBottom - bottom;
-
-	// std::cout << "Enemy mask" << std::endl;
-	for (int y = 0; y != rows; ++y)
-	{	
-		for (int x = 0; x != columns; ++x)
-		{
-			if (this->Sprite.Mask[(aLeft + x) + (aBottom + y) * this->Sprite.Width])
-				return true;
-			//if (checkPixelPerfectCollisionForFirst(aLeft + x, aBottom + y))
-			////	std::cout << "1 ";
-			////else
-			////	std::cout << "0 ";
-			//	return true;
-		}
-		// std::cout << std::endl;
-	}
-
-	return false;
-}
-
-bool EnemyObject::DoCollisions(GameObject* gameObject)
-{
-	glm::vec2 projectileCollider = { gameObject->Size.x, gameObject->Size.y / 1.0f };
-
-	return CheckCollision(this->Position, this->Size
-		, gameObject->Position, projectileCollider);
-}
+//bool EnemyObject::CheckCollision(glm::vec2 aPosition
+//	, glm::vec2 aSize
+//	, glm::vec2 bPosition
+//	, glm::vec2 bSize)
+//{
+//	int aLeft, aRight, aBottom, aTop;
+//	int bLeft, bRight, bBottom, bTop;
+//
+//	aLeft = aPosition.x; 
+//	aRight = aLeft + aSize.x;
+//	aBottom = aPosition.y;
+//	aTop = aBottom - aSize.y;
+//
+//	bLeft = bPosition.x;
+//	bRight = bLeft + bSize.x;
+//	bBottom = bPosition.y;
+//	bTop = bBottom - bSize.y;
+//
+//	if (aLeft > bRight || aRight < bLeft
+//		|| aBottom < bTop || aTop > bBottom)
+//		return false;
+//
+//	int left, right, bottom, top;
+//	int columns, rows;
+//
+//	left = std::max(aLeft, bLeft);
+//	right = std::min(aRight, bRight);
+//	top = std::max(aTop, bTop);
+//	bottom = std::min(aBottom, bBottom);
+//	columns = right - left + 1;
+//	rows = bottom - top + 1;
+//
+//	aLeft = left - aLeft;
+//	aBottom = aBottom - bottom;
+//
+//	bLeft = left - bLeft;
+//	bBottom = bBottom - bottom;
+//
+//	// std::cout << "Enemy mask" << std::endl;
+//	for (int y = 0; y != rows; ++y)
+//	{	
+//		for (int x = 0; x != columns; ++x)
+//		{
+//			if (this->Sprite.Mask[(aLeft + x) + (aBottom + y) * this->Sprite.Width])
+//				return true;
+//			//if (checkPixelPerfectCollisionForFirst(aLeft + x, aBottom + y))
+//			////	std::cout << "1 ";
+//			////else
+//			////	std::cout << "0 ";
+//			//	return true;
+//		}
+//		// std::cout << std::endl;
+//	}
+//
+//	return false;
+//}
+//
+//bool EnemyObject::DoCollisions(GameObject* gameObject)
+//{
+//	glm::vec2 projectileCollider = { gameObject->Size.x, gameObject->Size.y / 1.0f };
+//
+//	return CheckCollision(this->Position, this->Size
+//		, gameObject->Position, projectileCollider);
+//}

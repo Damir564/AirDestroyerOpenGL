@@ -37,7 +37,7 @@ ChunkObject::ChunkObject(int width, int height, int number)
     std::vector<int> enemiesHeightPositions(heightPositions.begin(), heightPositions.begin() + enemiesAmount);  
     for (int heightPosition : enemiesHeightPositions)
     {
-        std::cout << "height " << heightPosition << std::endl;
+        std::cout << "enemy Height position " << heightPosition << std::endl;
         Enemies.push_back(new EnemyObject(glm::vec2{ (float)createRandomNumber(borderSize, width - borderSize - SHIP_SIZE.x)
             , _offset
             + height
@@ -68,42 +68,71 @@ void ChunkObject::Move(float dt)
     // std::cout << Enemies[0]->Position.y << std::endl;
     if (_offset >= 0.0f)
     {
+        // std::cout << "offset " << _offset << ": " << Borders[0]->Position.y << "; " << Borders[0]->Position.y + Borders[0]->Size.y << std::endl;
         //std::cout << _offset << std::endl;
         IsDestroyed = true;    
     }
 }
 
-void ChunkObject::DoCollisions(std::vector<ProjectileObject*> projectiles)
-{
-    for (ProjectileObject* projectile : projectiles)
-    {
-        for (BorderObject* border : Borders)
-        {
-            if (CollisionManager::DoCollisions(border, projectile, false, false))
-            {
-                projectile->IsDestroyed = true;
-                border->IsDestroyed = true;
-                continue;
-            }
-        }
-        for (EnemyObject* enemy : Enemies)
-        {
-            //if (enemy->DoCollisions(projectile))
-            //{
-            //    projectile->IsDestroyed = true;
-            //    enemy->IsDestroyed = true;
-            //    continue;
-            //}
-            if (CollisionManager::DoCollisions(enemy, projectile, true, false))
-            {
-                projectile->IsDestroyed = true;
-                enemy->IsDestroyed = true;
-                continue;
-            }
-        }
-
-    }
-}
+//void ChunkObject::DoCollisions(std::vector<ProjectileObject*> projectiles)
+//{
+//    for (BorderObject* border : this->Borders)
+//    {
+//        for (ProjectileObject* projectile : projectiles)
+//        {
+//            if (CollisionManager::DoCollisions(border, projectile, false, false))
+//            {
+//                projectile->IsDestroyed = true;
+//                continue;
+//            }
+//        }
+//    }
+//    for (EnemyObject* enemy : Enemies)
+//    {
+//        for (ProjectileObject* projectile : projectiles)
+//        {
+//            if (CollisionManager::DoCollisions(enemy, projectile, true, false))
+//            {
+//                projectile->IsDestroyed = true;
+//                enemy->IsDestroyed = true;
+//                continue;
+//            }
+//        }
+//    }
+//    for (ProjectileObject* projectile : projectiles)
+//    {
+//        for (BorderObject* border : this->Borders)
+//        {
+//            //if (border->Position.y < 0)
+//            //    continue;
+//            if (CollisionManager::DoCollisions(border, projectile, false, false))
+//            {
+//                projectile->IsDestroyed = true;
+//                
+//                // border->IsDestroyed = true;
+//                // continue;
+//            }
+//        }
+//        for (EnemyObject* enemy : Enemies)
+//        {
+//            if (enemy->Position.y < 0)
+//                continue;
+//            //if (enemy->DoCollisions(projectile))
+//            //{
+//            //    projectile->IsDestroyed = true;
+//            //    enemy->IsDestroyed = true;
+//            //    continue;
+//            //}
+//            if (CollisionManager::DoCollisions(enemy, projectile, true, false))
+//            {
+//                projectile->IsDestroyed = true;
+//                enemy->IsDestroyed = true;
+//                continue;
+//            }
+//        }
+//
+//    }
+//}
 
 //void ChunkObject::Draw(SpriteRenderer& spriteRenderer, ColorRenderer& colorRenderer)
 //{

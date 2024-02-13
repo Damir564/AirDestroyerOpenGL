@@ -3,31 +3,14 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <vector>
-//#include <tuple>
 #include <iostream>
-// #include "game_object.h"
-//#include "program.h"
-//#include "game_level.h"
-//#include "power_up.h"
 
-// Represents the current state of the game
-//enum GameState {
-//    GAME_ACTIVE,
-//    GAME_MENU,
-//    GAME_WIN
-//};
-//
-//// Represents the four possible (collision) directions
-//enum Direction {
-//    UP,
-//    RIGHT,
-//    DOWN,
-//    LEFT
-//};
-// Defines a Collision typedef that represents collision data
-//typedef std::tuple<bool, Direction, glm::vec2> Collision; // <collision?, what direction?, difference vector center - closest point>
+enum GameState {
+    GAME_ACTIVE,
+    GAME_MENU,
+    GAME_WIN
+};
 
-// Initial size of the player paddle
 const glm::vec2 PLAYER_SIZE(50.0f, 50.0f);
 const float PLAYER_OFFSET_Y = 170.0f;
 const float PLAYER_OFFSET_X = 50.0f;
@@ -60,10 +43,7 @@ class PlayerObject;
 class Game
 {
 public:
-	//static void SetFirstTime(float value);
-	//static float GetFirstTime();
-    // game state
-    //GameState               State;
+    GameState               State;
     bool                    Keys[1024];
     bool                    KeysProcessed[1024];
     unsigned int            Width, Height;
@@ -71,10 +51,6 @@ public:
     std::vector<ProjectileObject*> Projectiles;
     std::vector<ChunkObject*> Chunks;
     PlayerObject* Player;
-    //std::vector<GameLevel>  Levels;
-    //std::vector<PowerUp>    PowerUps;
-    //unsigned int            Level;
-    //unsigned int            Lives;
     // constructor/destructor
     Game(unsigned int width, unsigned int height);
     ~Game();
@@ -100,6 +76,10 @@ private:
     void CreateChunk(int n);
 
     void CreatePlayer();
+    void DestroyAll();
+
+    void StartGame();
+    void EndGame();
 
     void InitSpriteRenderer();
     void LoadTextures();

@@ -1,6 +1,7 @@
 #include "collision_manager.h"
 
 #include "game_object.h"
+#include <iostream>
 
 bool CollisionManager::DoCollisions(GameObject* aGameObject, GameObject* bGameObject, bool aPixelPerfectCollision, bool bPixelPerfectCollision)
 {
@@ -9,21 +10,43 @@ bool CollisionManager::DoCollisions(GameObject* aGameObject, GameObject* bGameOb
 
 	aLeft = aGameObject->Position.x;
 	aRight = aLeft + aGameObject->Size.x;
-	aBottom = aGameObject->Position.y;
-	aTop = aBottom - aGameObject->Size.y;
+	aTop = aGameObject->Position.y;
+	aBottom = aTop + aGameObject->Size.y;
+
 
 	bLeft = bGameObject->Position.x;
 	bRight = bLeft + bGameObject->Size.x;
-	bBottom = bGameObject->Position.y;
-	bTop = bBottom - bGameObject->Size.y;
+	bTop = bGameObject->Position.y;
+	bBottom = bTop + bGameObject->Size.y;
+
+	//if (aBottom < 0 || bBottom < 0)
+	//	return false;
 
 	if (aLeft > bRight || aRight < bLeft
 		|| aBottom < bTop || aTop > bBottom)
 		return false;
 
-	if ((aPixelPerfectCollision || bPixelPerfectCollision) == false)
-		return true;
+	if (aPixelPerfectCollision == false && bPixelPerfectCollision == false)
+	{
+		//std::cout << "Border" << std::endl;
+		//std::cout << "Position: " << std::endl
+		//	<< "aLeft: " << aLeft << "; aRight: " << aRight << std::endl
+		//	<< "aBottom: " << aBottom << "; aTop: " << aTop << std::endl;
+		//std::cout << "Size: " << aGameObject->Size.x << "; " << aGameObject->Size.y << std::endl;
 
+		//std::cout << "Projectile" << std::endl;
+		//std::cout << "Position: " << std::endl
+		//	<< "bLeft: " << bLeft << "; bRight: " << bRight << std::endl
+		//	<< "bBottom: " << bBottom << "; bTop: " << bTop << std::endl;
+		//std::cout << "===============================" << std::endl;
+		//std::cout << "Projectile" << std::endl;
+		//std::cout << "Position: " << bGameObject->Position.x << "; " << bGameObject->Position.y << std::endl;
+		//std::cout << "Size: " << bGameObject->Size.x << "; " << bGameObject->Size.y << std::endl;
+		return true;
+	}
+
+
+	
 	int left, right, bottom, top;
 	int columns, rows;
 
@@ -45,8 +68,8 @@ bool CollisionManager::DoCollisions(GameObject* aGameObject, GameObject* bGameOb
 	{
 		for (int x = 0; x != columns; ++x)
 		{
-			if (aGameObject->Sprite.Mask[(aLeft + x) + (aBottom + y) * aGameObject->Sprite.Width])
-				return true;
+			//if (aGameObject->Sprite.Mask[(aLeft + x) + (aBottom + y) * aGameObject->Sprite.Width])
+			//	return true;
 			bool aPixel = aPixelPerfectCollision == true ? CheckMask(aGameObject, aLeft + x, aBottom + y) : true;
 			bool bPixel = bPixelPerfectCollision == true ? CheckMask(bGameObject, bLeft + x, bBottom + y) : true;
 			if (aPixel && bPixel)

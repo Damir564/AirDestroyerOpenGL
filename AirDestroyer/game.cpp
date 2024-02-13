@@ -5,6 +5,7 @@
 #include "utilities/resource_manager.h"
 #include "utilities/sprite_renderer.h"
 #include "utilities/color_renderer.h"
+#include "collision_manager.h"
 
 
 //Instantiate static variables
@@ -30,7 +31,8 @@ const int CHUNKS_AMOUNT_BUFFER = 8;
 //    return Game::firstFrame;
 //}
 
-Game::Game(unsigned int width, unsigned int height) : Keys(), KeysProcessed(), Width(width), Height(height)
+Game::Game(unsigned int width, unsigned int height) 
+    : State(GAME_MENU), Keys(), KeysProcessed(), Width(width), Height(height)
 {
 	
 }
@@ -58,6 +60,28 @@ void Game::CreatePlayer()
     glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
     // Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"), glm::vec3(1.0f), PLAYER_VELOCITY);
     Player = new PlayerObject(playerPos, PLAYER_SIZE, PLAYER_VELOCITY, glm::vec3(1.0f), ResourceManager::GetTexture("player"));
+}
+
+void Game::DestroyAll()
+{
+    // Player->IsDestroyed = true;
+    for (ChunkObject* chunk : this->Chunks)
+    {
+        chunk->IsDestroyed = true;
+    }
+}
+
+void Game::StartGame()
+{
+    this->GenerateChunks();
+    this->CreatePlayer();
+    this->State = GAME_ACTIVE;
+}
+
+void Game::EndGame()
+{
+    DestroyAll();
+    this->State = GAME_MENU;
 }
 
 void Game::LoadTextures()
@@ -93,23 +117,31 @@ void Game::Init()
     this->InitSpriteRenderer();
     this->InitColorRenderer();
     this->LoadTextures();
-
-    this->GenerateChunks();   
-    this->CreatePlayer();
 }
 
 void Game::ProcessInput(float dt)
 {
     // float velocity = PLAYER_VELOCITY * dt;
     // move playerboard
-    if (this->Keys[GLFW_KEY_A] || this->Keys[GLFW_KEY_D])
+    if (this->State == GAME_MENU)
     {
-        Player->Turn(dt, *this);
+        if (this->Keys[GLFW_KEY_SPACE] && !this->KeysProcessed[GLFW_KEY_SPACE])
+        {
+            this->StartGame();
+            this->KeysProcessed[GLFW_KEY_SPACE] = true;
+        }
     }
-    if (this->Keys[GLFW_KEY_SPACE] && !this->KeysProcessed[GLFW_KEY_SPACE])
+    else if (this->State == GAME_ACTIVE)
     {
-        this->Fire();
-        this->KeysProcessed[GLFW_KEY_SPACE] = true;
+        if (this->Keys[GLFW_KEY_A] || this->Keys[GLFW_KEY_D])
+        {
+            Player->Turn(dt, *this);
+        }
+        if (this->Keys[GLFW_KEY_SPACE] && !this->KeysProcessed[GLFW_KEY_SPACE])
+        {
+            this->Fire();
+            this->KeysProcessed[GLFW_KEY_SPACE] = true;
+        }
     }
 }
 
@@ -124,44 +156,93 @@ void Game::Fire()
 
 void Game::Update(float dt)
 {
-    if (Chunks.size() == 1)
-        this->GenerateChunks();
-    for (ChunkObject* chunk : Chunks)
+    if (this->State == GAME_ACTIVE)
     {
-        chunk->Move(dt);
+        if (Chunks.size() == 1)
+            this->GenerateChunks();
+        for (ChunkObject* chunk : Chunks)
+        {
+            chunk->Move(dt);
+        }
+        for (ProjectileObject* projectile : Projectiles)
+        {
+            // projectile->Move(dt);
+            projectile->Move(dt, Player->Position.x);
+        }
+        this->DoCollisions();
     }
-    for (ProjectileObject* projectile : Projectiles)
-    {
-        // projectile->Move(dt);
-        projectile->Move(dt, Player->Position.x);
-    }
-
-    this->DoCollisions();
-    this->Dispose();
 }
 
 void Game::DoCollisions()
 {
     for (ChunkObject* chunk : Chunks)
     {
-        chunk->DoCollisions(Projectiles);
+        if (chunk->_offset + Height * 2 < 0)
+            break;
+        // std::cout << chunk->_offset << std::endl;
+        // chunk->DoCollisions(Projectiles);
+        for (BorderObject* border : chunk->Borders)
+        {
+            for (ProjectileObject* projectile : Projectiles)
+            {
+                if (CollisionManager::DoCollisions(border, projectile, false, false))
+                {
+                    projectile->IsDestroyed = true;
+                    continue;
+                }
+            }
+            if (!Player->IsDestroyed)
+            {
+                if (CollisionManager::DoCollisions(border, Player, false, true))
+                {
+                    Player->IsDestroyed = true;
+                    this->EndGame();
+                    return;
+                }
+            }
+        }
+        for (EnemyObject* enemy : chunk->Enemies)
+        {
+            for (ProjectileObject* projectile : Projectiles)
+            {
+                if (CollisionManager::DoCollisions(enemy, projectile, true, false))
+                {
+                    projectile->IsDestroyed = true;
+                    enemy->IsDestroyed = true;
+                    continue;
+                }
+            }
+            if (Player != nullptr)
+            {
+                if (CollisionManager::DoCollisions(enemy, Player, true, true))
+                {
+                    Player->IsDestroyed = true;
+                    // enemy->IsDestroyed = true;
+                    this->EndGame();
+                    
+                    return;
+                }
+            }
+        }
     }
+    std::cout << std::endl << std::endl;
 }
 
 void Game::Render()
 { 
-    for (ChunkObject* chunk : Chunks)
+    if (this->State == GAME_ACTIVE)
     {
-        //chunk->Draw(*spriteRenderer, *colorRenderer);
-        chunk->Draw(*spriteRenderer);
-        chunk->Draw(*colorRenderer);
-    }
-    Player->Draw(*spriteRenderer);
-    //if (Projectile != NULL)
-    //    Projectile->Draw(*colorRenderer);
-    for (ProjectileObject* projectile : Projectiles)
-    {
-        projectile->Draw(*colorRenderer);
+        Player->Draw(*spriteRenderer);
+        for (ProjectileObject* projectile : Projectiles)
+        {
+            projectile->Draw(*colorRenderer);
+        }
+        for (ChunkObject* chunk : Chunks)
+        {
+            //chunk->Draw(*spriteRenderer, *colorRenderer);
+            chunk->Draw(*spriteRenderer);
+            chunk->Draw(*colorRenderer);
+        }
     }
 }
 
@@ -185,7 +266,7 @@ void Game::Dispose()
         }
         else {
             ++it;
-        }
+        }   
     }
 }
 

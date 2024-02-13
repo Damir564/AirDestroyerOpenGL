@@ -62,10 +62,9 @@ int main()
         glClearColor(0.184f, 0.196f, 0.714f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         game.Render();
+        game.Dispose();
 
         glfwSwapBuffers(window);
-
-        
     }
 
     ResourceManager::Clear();

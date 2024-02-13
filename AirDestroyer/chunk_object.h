@@ -32,12 +32,12 @@ public:
     void Draw(ColorRenderer& renderer) override;
 
     bool Dispose();
-
+    float _offset;
     // Physics
-    void DoCollisions(std::vector<ProjectileObject*> projectiles);
+    // void DoCollisions(std::vector<ProjectileObject*> projectiles);
 //    bool Destroyed() { return _destroyed; }
 //private:
 //    bool _destroyed;
 private:
-    float _offset;
+    // float _offset;
 };
