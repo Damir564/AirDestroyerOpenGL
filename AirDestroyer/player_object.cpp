@@ -1,4 +1,5 @@
 #include "player_object.h"
+#include "utilities/resource_manager.h"
 
 
 PlayerObject::PlayerObject() : GameObject(), _canShoot(true)
@@ -8,23 +9,31 @@ PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity, gl
     : GameObject(pos, size, velocity, color, sprite), _canShoot(true)
 { }
 
-void PlayerObject::Turn(float dt, Game& game)
+void PlayerObject::Move(const float dt, const Game& game)
 {
     
-    if (game.Keys[GLFW_KEY_A])
+    if (game.Keys[GLFW_KEY_A] || game.Keys[GLFW_KEY_LEFT])
     {
-        if (Position.x >= PLAYER_OFFSET_X)
-        {
-            Position.x -= Velocity.x * dt;
-        }
+        Position.x -= Velocity.x * dt;
+        Sprite = ResourceManager::GetTexture("player_left");     
     }
-    if (game.Keys[GLFW_KEY_D])
+    if (game.Keys[GLFW_KEY_D] || game.Keys[GLFW_KEY_RIGHT])
     {
-        if (Position.x <= game.Width - Size.x - PLAYER_OFFSET_X)
-        {
-            Position.x += Velocity.x * dt;
-        }
+        Position.x += Velocity.x * dt;
+        Sprite = ResourceManager::GetTexture("player_right");
     }
+    if (!(game.Keys[GLFW_KEY_A] || game.Keys[GLFW_KEY_LEFT]
+        || game.Keys[GLFW_KEY_D] || game.Keys[GLFW_KEY_RIGHT]))
+    {
+        Sprite = ResourceManager::GetTexture("player");
+    }
+
+    if (game.Keys[GLFW_KEY_W] || game.Keys[GLFW_KEY_UP])
+        Velocity.y = PLAYER_VELOCITY_Y_UP;
+    else if (game.Keys[GLFW_KEY_S] || game.Keys[GLFW_KEY_DOWN])
+        Velocity.y = PLAYER_VELOCITY_Y_DOWN;
+    else
+        Velocity.y = PLAYER_VELOCITY_Y_BASE;
 }
 
 bool PlayerObject::Shoot(glm::vec2& projectilePos)

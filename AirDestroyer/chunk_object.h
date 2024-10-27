@@ -20,12 +20,12 @@ class ChunkObject : public GameObject
 public:
     //glm::vec2   Position;
     //bool        IsSolid;
-    std::vector<EnemyObject*> Enemies;
-    std::vector<BorderObject*> Borders;
+    std::vector<EnemyObject> Enemies;
+    std::vector<BorderObject> Borders;
 
     // ChunkObject(float startHeight);
     ChunkObject(int width, int height, int number);
-    void Move(float dt);
+    void Move(const float dt, const float fPlayerVelocityY);
      
     // void Draw(SpriteRenderer& spriteRenderer, ColorRenderer& colorRenderer);
     void Draw(SpriteRenderer& renderer) override;

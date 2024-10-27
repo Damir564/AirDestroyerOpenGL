@@ -9,6 +9,10 @@
 //#include "projectile_object.h"
 //#include "texture.h"
 
+const float PLAYER_VELOCITY_Y_BASE = 400.0f;
+const float PLAYER_VELOCITY_Y_UP = PLAYER_VELOCITY_Y_BASE * 1.5f;
+const float PLAYER_VELOCITY_Y_DOWN = PLAYER_VELOCITY_Y_BASE / 2.0f;
+
 class PlayerObject : public GameObject
 {
 public:
@@ -27,7 +31,7 @@ public:
     // moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
     //glm::vec2 Update(float dt);
     //glm::vec2 ProcessInput(float dt, Game* game);
-    void Turn(float dt, Game& game);
+    void Move(const float dt, const Game& game);
     bool Shoot(glm::vec2& projectilePos);
     // resets the ball to original state with given position and velocity
     // void      Reset(glm::vec2 position, glm::vec2 velocity);

@@ -30,7 +30,7 @@ const glm::vec2 SHIP_VELOCITY(0.0f, 0.0f);
 // const glm::vec2 ENEMY_VELOCITY(0.0f, 200.0f);
 
 // const glm::vec2 CHUNK_VELOCITY(0.0f, 50.0f);
-const glm::vec2 CHUNK_VELOCITY(0.0f, 400.0f);
+//const glm::vec2 CHUNK_VELOCITY(0.0f, 400.0f);
 
 const glm::vec2 BORDER_SIZE(125.0f, 0.0f);
 const glm::vec3 BORDER_COLOR = { 0.333f, 0.651f, 0.220f };
@@ -48,9 +48,9 @@ public:
     bool                    KeysProcessed[1024];
     unsigned int            Width, Height;
 
-    std::vector<ProjectileObject*> Projectiles;
-    std::vector<ChunkObject*> Chunks;
-    PlayerObject* Player;
+    std::vector<ProjectileObject> Projectiles;
+    std::vector<ChunkObject> Chunks;
+    std::unique_ptr<PlayerObject> Player;
     // constructor/destructor
     Game(unsigned int width, unsigned int height);
     ~Game();

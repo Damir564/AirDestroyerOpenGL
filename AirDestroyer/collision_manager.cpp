@@ -3,7 +3,7 @@
 #include "game_object.h"
 #include <iostream>
 
-bool CollisionManager::DoCollisions(GameObject* aGameObject, GameObject* bGameObject, bool aPixelPerfectCollision, bool bPixelPerfectCollision)
+bool CollisionManager::DoCollisions(const GameObject* aGameObject, const GameObject* bGameObject, bool aPixelPerfectCollision, bool bPixelPerfectCollision)
 {
 	int aLeft, aRight, aBottom, aTop;
 	int bLeft, bRight, bBottom, bTop;
@@ -54,8 +54,8 @@ bool CollisionManager::DoCollisions(GameObject* aGameObject, GameObject* bGameOb
 	right = std::min(aRight, bRight);
 	top = std::max(aTop, bTop);
 	bottom = std::min(aBottom, bBottom);
-	columns = right - left + 1;
-	rows = bottom - top + 1;
+	columns = right - left;
+	rows = bottom - top;
 
 	aLeft = left - aLeft;
 	aBottom = aBottom - bottom;
@@ -96,9 +96,9 @@ bool CollisionManager::DoCollisions(GameObject* aGameObject, GameObject* bGameOb
 	//return CheckCollisionPixelPerfect(aGameObject, bGameObject, aPixelPerfectCollision, bPixelPerfectCollision);
 }
 
-bool CollisionManager::CheckMask(GameObject* gameObject, int xOffset, int yOffset)
+bool CollisionManager::CheckMask(const GameObject* gameObject, int xOffset, int yOffset)
 {
-	if (gameObject->Sprite.Mask[xOffset + yOffset * gameObject->Sprite.Width])
+	if (gameObject->Sprite.Mask[xOffset + yOffset * (gameObject->Sprite.Width)])
 		return true;
 	return false;
 }
