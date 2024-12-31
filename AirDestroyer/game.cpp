@@ -6,14 +6,16 @@
 #include "utilities/color_renderer.h"
 #include "utilities/resource_manager.h"
 #include "utilities/sprite_renderer.h"
+#include "utilities/text_renderer.h"
 
 
 //Instantiate static variables
 float Game::firstFrame;
 
 // Game-related State data
-SpriteRenderer* spriteRenderer;
-ColorRenderer* colorRenderer;
+std::unique_ptr<SpriteRenderer> m_pSpriteRenderer;
+std::unique_ptr<ColorRenderer> m_pColorRenderer;
+std::unique_ptr<TextRenderer> m_pTextRenderer;
 //ProjectileObject* Projectile;
 const int CHUNKS_AMOUNT_BUFFER = 8;
 //PlayerObject* Player;
@@ -32,7 +34,7 @@ const int CHUNKS_AMOUNT_BUFFER = 8;
 //}
 
 Game::Game(unsigned int width, unsigned int height) 
-    : State(GAME_MENU), Keys(), KeysProcessed(), Width(width), Height(height)
+    : State(GAME_MENU), Keys(), KeysProcessed(), Width(width), Height(height), m_score(0)
 {
 	
 }
@@ -60,6 +62,7 @@ void Game::CreatePlayer()
     glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
     // Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"), glm::vec3(1.0f), PLAYER_VELOCITY);
     Player = std::make_unique<PlayerObject>(playerPos, PLAYER_SIZE, PLAYER_VELOCITY, glm::vec3(1.0f), ResourceManager::GetTexture("player"));
+    m_score = 0;
 }
 
 void Game::DestroyAll()
@@ -81,7 +84,7 @@ void Game::StartGame()
 void Game::EndGame()
 {
     DestroyAll();
-    this->State = GAME_MENU;
+    this->State = GAME_END;
 }
 
 void Game::LoadTextures()
@@ -100,7 +103,7 @@ void Game::InitSpriteRenderer()
     ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
     Shader shader = ResourceManager::GetShader("sprite");
-    spriteRenderer = new SpriteRenderer(shader);
+    m_pSpriteRenderer = std::make_unique<SpriteRenderer>(shader);
 }
 
 void Game::InitColorRenderer()
@@ -110,7 +113,22 @@ void Game::InitColorRenderer()
     ResourceManager::GetShader("color").Use();
     ResourceManager::GetShader("color").SetMatrix4("projection", projection);
     Shader colorShader = ResourceManager::GetShader("color");
-    colorRenderer = new ColorRenderer(colorShader);
+    m_pColorRenderer = std::make_unique<ColorRenderer>(colorShader);
+}
+
+void Game::InitTextRenderer()
+{
+    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width), 0.0f, static_cast<float>(this->Height), -1.0f, 1.0f);
+    ResourceManager::LoadShader("shaders/text.vert", "shaders/text.frag", nullptr, "text");
+    ResourceManager::GetShader("text").Use();
+    ResourceManager::GetShader("text").SetMatrix4("projection", projection);
+    Shader textShader = ResourceManager::GetShader("text");
+    m_pTextRenderer = std::make_unique<TextRenderer>(textShader);
+}
+
+void Game::LoadFreeType()
+{
+
 }
 
 
@@ -118,16 +136,21 @@ void Game::Init()
 {
     this->InitSpriteRenderer();
     this->InitColorRenderer();
+    this->InitTextRenderer();
     this->LoadTextures();
+    this->LoadFreeType();
 }
 
 void Game::ProcessInput(float dt)
 {
-    if (this->State == GAME_MENU)
+    if (this->State == GAME_MENU || this->State == GAME_END)
     {
         if (this->Keys[GLFW_KEY_SPACE] && !this->KeysProcessed[GLFW_KEY_SPACE])
         {
-            this->StartGame();
+            if (this->State == GAME_MENU)
+                this->StartGame();
+            else
+                this->State = GAME_MENU;
             this->KeysProcessed[GLFW_KEY_SPACE] = true;
         }
     }
@@ -156,6 +179,8 @@ void Game::Update(float dt)
 {
     if (this->State == GAME_ACTIVE)
     {
+        if (Player)
+            Player->Update(dt);
         if (Chunks.size() == 1)
             this->GenerateChunks();
         for (auto& chunk : Chunks)
@@ -202,8 +227,9 @@ void Game::DoCollisions()
             {
                 if (CollisionManager::DoCollisions(&enemy, &projectile, true, false))
                 {
+                    AddScore(ENEMY_SCORE);
                     projectile.IsDestroyed = true;
-                    enemy.IsDestroyed = true;
+                    enemy.IsDestroyed = true; 
                     continue;
                 }
             }
@@ -226,17 +252,28 @@ void Game::Render()
 { 
     if (this->State == GAME_ACTIVE)
     {
-        Player->Draw(*spriteRenderer);
+        Player->Draw(m_pSpriteRenderer);
         for (auto& projectile : Projectiles)
         {
-            projectile.Draw(*colorRenderer);
+            projectile.Draw(m_pColorRenderer);
         }
         for (auto& chunk : Chunks)
         {
             //chunk->Draw(*spriteRenderer, *colorRenderer);
-            chunk.Draw(*spriteRenderer);
-            chunk.Draw(*colorRenderer);
+            chunk.Draw(m_pSpriteRenderer);
+            chunk.Draw(m_pColorRenderer);
         }
+        // std::string strScore = std::to_string(m_score);
+        m_pTextRenderer->DrawText(std::to_string(m_score), glm::vec2(50.0f, 50.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    }
+    else if (this->State == GAME_MENU)
+    {
+        m_pTextRenderer->DrawText("PRESS SPACE", glm::vec2(this->Width / 3.2f, this->Height / 2.1f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    }
+    else if (this->State == GAME_END)
+    {
+        m_pTextRenderer->DrawText("GAME OVER", glm::vec2(this->Width / 3.2f + 50.0f, this->Height / 2.1f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        m_pTextRenderer->DrawText(std::to_string(m_score), glm::vec2(this->Width / 2.0f, this->Height / 3.2f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
     }
 }
 
@@ -259,6 +296,11 @@ void Game::Dispose()
             ++it;
         }   
     }
+}
+
+void Game::AddScore(const int scoreToAdd)
+{
+    m_score += scoreToAdd;
 }
 
 void Game::ResetPlayer()

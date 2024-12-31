@@ -63,6 +63,9 @@
     <ClCompile Include="collision_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="utilities\text_renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utilities\shader.h">
@@ -110,6 +113,9 @@
     <ClInclude Include="collision_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="utilities\text_renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />
@@ -118,6 +124,8 @@
     <None Include="shaders\color.vert" />
     <None Include="shaders\sprite.frag" />
     <None Include="shaders\sprite.vert" />
+    <None Include="shaders\text.frag" />
+    <None Include="shaders\text.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\airplane.png">

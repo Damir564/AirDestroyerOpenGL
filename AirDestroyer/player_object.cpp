@@ -2,12 +2,20 @@
 #include "utilities/resource_manager.h"
 
 
-PlayerObject::PlayerObject() : GameObject(), _canShoot(true)
+PlayerObject::PlayerObject() : GameObject(), m_canShoot(true)
 { }
 
 PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity, glm::vec3 color, Texture2D sprite)
-    : GameObject(pos, size, velocity, color, sprite), _canShoot(true)
+    : GameObject(pos, size, velocity, color, sprite), m_canShoot(true)
 { }
+
+void PlayerObject::Update(const float dt)
+{
+    if ((float)glfwGetTime() - this->m_shootTime > m_coolDown)
+    {
+        m_canShoot = true;
+    }
+}
 
 void PlayerObject::Move(const float dt, const Game& game)
 {
@@ -38,24 +46,24 @@ void PlayerObject::Move(const float dt, const Game& game)
 
 bool PlayerObject::Shoot(glm::vec2& projectilePos)
 {
-    if (_canShoot)
+    if (m_canShoot)
     {
         // Process Audio
         std::cout << "Piu" << std::endl;
 
-        _canShoot = false;
-        _shootTime = (float)glfwGetTime();
+        m_canShoot = false;
+        m_shootTime = (float)glfwGetTime();
 
         projectilePos = glm::vec2(Position.x + (PLAYER_SIZE.x - PROJECTILE_SIZE.x) / 2, Position.y);
 
         return true;
     }
-    if ((float)glfwGetTime() - this->_shootTime >= _coolDown)
-    {
-        _canShoot = true;
+    //if ((float)glfwGetTime() - this->m_shootTime > m_coolDown)
+    //{
+    //    m_canShoot = true;
 
-        // return false;
-    }
+    //    // return false;
+    //}
     return false;
 }
 

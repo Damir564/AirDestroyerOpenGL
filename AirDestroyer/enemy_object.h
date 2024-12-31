@@ -2,6 +2,8 @@
 
 #include "game_object.h"
 
+#define ENEMY_SCORE 1
+
 class EnemyObject : public GameObject
 {
 public:

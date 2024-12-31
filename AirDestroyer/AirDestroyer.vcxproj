@@ -116,7 +116,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,6 +146,7 @@
     <ClCompile Include="program.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="projectile_object.cpp" />
+    <ClCompile Include="utilities\text_renderer.cpp" />
     <ClCompile Include="utilities\color_renderer.cpp" />
     <ClCompile Include="utilities\resource_manager.cpp" />
     <ClCompile Include="utilities\shader.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="player_object.h" />
     <ClInclude Include="program.h" />
     <ClInclude Include="projectile_object.h" />
+    <ClInclude Include="utilities\text_renderer.h" />
     <ClInclude Include="utilities\color_renderer.h" />
     <ClInclude Include="utilities\resource_manager.h" />
     <ClInclude Include="utilities\shader.h" />
@@ -177,6 +179,8 @@
     <None Include="shaders\color.vert" />
     <None Include="shaders\sprite.frag" />
     <None Include="shaders\sprite.vert" />
+    <None Include="shaders\text.frag" />
+    <None Include="shaders\text.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\airplane.png" />

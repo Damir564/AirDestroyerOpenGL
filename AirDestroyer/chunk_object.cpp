@@ -67,7 +67,7 @@ void ChunkObject::Move(float dt, float fPlayerVelocityY)
     }
 }
 
-void ChunkObject::Draw(SpriteRenderer& renderer)
+void ChunkObject::Draw(std::unique_ptr<SpriteRenderer>& renderer)
 {
     for (auto& enemy : Enemies)
     {
@@ -75,7 +75,7 @@ void ChunkObject::Draw(SpriteRenderer& renderer)
     }
 }
 
-void ChunkObject::Draw(ColorRenderer& renderer)
+void ChunkObject::Draw(std::unique_ptr<ColorRenderer>& renderer)
 {
     for (auto& border : Borders)
     {

@@ -29,15 +29,15 @@ public:
         , glm::vec3 color = glm::vec3(1.0f)
         , Texture2D sprite = Texture2D());
     // moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
-    //glm::vec2 Update(float dt);
+    void Update(const float dt);
     //glm::vec2 ProcessInput(float dt, Game* game);
     void Move(const float dt, const Game& game);
     bool Shoot(glm::vec2& projectilePos);
     // resets the ball to original state with given position and velocity
     // void      Reset(glm::vec2 position, glm::vec2 velocity);
 private:
-    bool _canShoot;
-    float _shootTime = 0.0f;
-    float _coolDown = 0.16f;
+    bool m_canShoot;
+    float m_shootTime = 0.0f;
+    float m_coolDown = 0.5f;
 };
 

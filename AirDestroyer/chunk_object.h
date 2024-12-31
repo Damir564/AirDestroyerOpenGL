@@ -28,8 +28,8 @@ public:
     void Move(const float dt, const float fPlayerVelocityY);
      
     // void Draw(SpriteRenderer& spriteRenderer, ColorRenderer& colorRenderer);
-    void Draw(SpriteRenderer& renderer) override;
-    void Draw(ColorRenderer& renderer) override;
+    void Draw(std::unique_ptr<SpriteRenderer>& renderer) override;
+    void Draw(std::unique_ptr<ColorRenderer>& renderer) override;
 
     bool Dispose();
     float _offset;

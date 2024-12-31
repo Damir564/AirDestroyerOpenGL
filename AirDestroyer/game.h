@@ -8,6 +8,7 @@
 enum GameState {
     GAME_ACTIVE,
     GAME_MENU,
+    GAME_END,
     GAME_WIN
 };
 
@@ -39,7 +40,6 @@ class ProjectileObject;
 class ChunkObject;
 class PlayerObject;
 
-
 class Game
 {
 public:
@@ -63,6 +63,7 @@ public:
     void DoCollisions();
     void Render();
     void Dispose();
+    void AddScore(const int scoreToAdd);
     //void DoCollisions();
     // reset
     //void ResetLevel();
@@ -71,6 +72,8 @@ public:
     //void SpawnPowerUps(GameObject& block);
     //void UpdatePowerUps(float dt);
 private:
+    int m_score;
+
     static float firstFrame;
     void GenerateChunks();
     void CreateChunk(int n);
@@ -84,4 +87,7 @@ private:
     void InitSpriteRenderer();
     void LoadTextures();
     void InitColorRenderer();
+
+    void InitTextRenderer();
+    void LoadFreeType();
 };
