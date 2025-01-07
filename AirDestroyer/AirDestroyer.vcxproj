@@ -75,6 +75,11 @@
     <LibraryPath>$(ProjectDir)\sdk\libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)\</OutDir>
+    <LibraryPath>$(ProjectDir)\sdk\libraries\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\sdk\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -116,7 +121,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>freetype.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;glfw3.lib;opengl32.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,12 +132,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)\sdk\include;$(ProjectDir)\utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>sndfile.lib;openal32.lib;freetype.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -142,10 +150,15 @@
     <ClCompile Include="enemy_object.cpp" />
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="utilities\MusicBuffer.cpp" />
     <ClCompile Include="player_object.cpp" />
     <ClCompile Include="program.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="projectile_object.cpp" />
+    <ClCompile Include="utilities\SoundEffectsPlayer.cpp" />
+    <ClCompile Include="utilities\SoundEffectsLibrary.cpp" />
+    <ClCompile Include="utilities\SoundDevice.cpp" />
+    <ClCompile Include="utilities\sound_manager.cpp" />
     <ClCompile Include="utilities\text_renderer.cpp" />
     <ClCompile Include="utilities\color_renderer.cpp" />
     <ClCompile Include="utilities\resource_manager.cpp" />
@@ -161,9 +174,15 @@
     <ClInclude Include="enemy_object.h" />
     <ClInclude Include="game_object.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="utilities\MusicBuffer.h" />
     <ClInclude Include="player_object.h" />
     <ClInclude Include="program.h" />
     <ClInclude Include="projectile_object.h" />
+    <ClInclude Include="utilities\SoundEffectsPlayer.h" />
+    <ClInclude Include="utilities\SoundEffectsLibrary.h" />
+    <ClInclude Include="utilities\OpenALErrorCheck.h" />
+    <ClInclude Include="utilities\SoundDevice.h" />
+    <ClInclude Include="utilities\sound_manager.h" />
     <ClInclude Include="utilities\text_renderer.h" />
     <ClInclude Include="utilities\color_renderer.h" />
     <ClInclude Include="utilities\resource_manager.h" />

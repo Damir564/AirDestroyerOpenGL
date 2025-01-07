@@ -1,9 +1,16 @@
 #include "program.h"
+#include "sound_manager.h"
 
 Game game(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 int main()
 {
+    SoundDevice* soundDevice = SoundDevice::Get();
+
+    ALuint sound1 = SoundEffectsLibrary::Get()->Load("resources/sounds/effect_fire.wav"); 
+    SoundEffectsPlayer soundEffectsPlayer;
+    soundEffectsPlayer.Play(sound1);
+
     // glfw: initialize and configure
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);

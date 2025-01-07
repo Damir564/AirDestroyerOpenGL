@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <algorithm>
 #include "projectile_object.h"
 #include "collision_manager.h"
 
@@ -33,7 +34,9 @@ ChunkObject::ChunkObject(int width, int height, int number)
     {
         heightPositions.push_back(i);
     }
-    std::random_shuffle(heightPositions.begin(), heightPositions.end());
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(heightPositions.begin(), heightPositions.end(), g);
     std::vector<int> enemiesHeightPositions(heightPositions.begin(), heightPositions.begin() + enemiesAmount);  
     for (int heightPosition : enemiesHeightPositions)
     {
