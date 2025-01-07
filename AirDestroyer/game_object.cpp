@@ -19,3 +19,7 @@ void GameObject::Draw(std::unique_ptr<ColorRenderer>& renderer)
 {
     renderer->DrawColor(this->Position, this->Size, this->Rotation, this->Color);
 }
+
+GameObject::~GameObject()
+{
+}

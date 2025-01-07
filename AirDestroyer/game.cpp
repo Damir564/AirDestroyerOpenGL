@@ -54,21 +54,21 @@ void Game::GenerateChunks()
 
 void Game::CreateChunk(int n)
 {
-    Chunks.push_back(ChunkObject(Width, Height, n));
+    m_vecChunks.push_back(ChunkObject(Width, Height, n));
 }
 
 void Game::CreatePlayer()
 {
     glm::vec2 playerPos = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
     // Player = new PlayerObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("player"), glm::vec3(1.0f), PLAYER_VELOCITY);
-    Player = std::make_unique<PlayerObject>(playerPos, PLAYER_SIZE, PLAYER_VELOCITY, glm::vec3(1.0f), ResourceManager::GetTexture("player"));
+    m_pPlayer = std::make_unique<PlayerObject>(playerPos, PLAYER_SIZE, PLAYER_VELOCITY, glm::vec3(1.0f), ResourceManager::GetTexture("player"));
     m_score = 0;
 }
 
 void Game::DestroyAll()
 {
     // Player->IsDestroyed = true;
-    for (auto& chunk : this->Chunks)
+    for (auto& chunk : this->m_vecChunks)
     {
         chunk.IsDestroyed = true;
     }
@@ -131,6 +131,25 @@ void Game::LoadFreeType()
 
 }
 
+void Game::InitSounds()
+{
+    // SoundDevice::Get();
+    // m_pSoundDevice = std::make_unique<SoundDevice>(SoundDevice::Get());
+    // m_pSoundEffectsPlayer = std::make_unique<SoundEffectsPlayer>();
+    // m_pSoundEffectsPlayer = std::make_unique<SoundEffectsPlayer>();
+    ResourceManager::InitSounds();
+}
+
+void Game::LoadSounds()
+{
+    // ALuint soundFire = SoundEffectsLibrary::Get()->Load("resources/sounds/effect_fire.mp3");
+    ResourceManager::LoadSound("resources/sounds/effect_fire.mp3", "fire");
+    ResourceManager::LoadSound("resources/sounds/effect_hit.mp3", "hit");
+    ResourceManager::LoadSound("resources/sounds/game_end.mp3", "game_end");
+    //ALuint soundFire2 = SoundEffectsLibrary::Get()->Load("resources/sounds/effect_fire.mp3");
+    
+}
+
 
 void Game::Init()
 {
@@ -139,6 +158,8 @@ void Game::Init()
     this->InitTextRenderer();
     this->LoadTextures();
     this->LoadFreeType();
+    this->InitSounds();
+    this->LoadSounds();
 }
 
 void Game::ProcessInput(float dt)
@@ -156,7 +177,7 @@ void Game::ProcessInput(float dt)
     }
     else if (this->State == GAME_ACTIVE)
     {
-        Player->Move(dt, *this);
+        m_pPlayer->Move(dt, *this);
 
         if (this->Keys[GLFW_KEY_SPACE] && !this->KeysProcessed[GLFW_KEY_SPACE])
         {
@@ -169,9 +190,9 @@ void Game::ProcessInput(float dt)
 void Game::Fire()
 {
     glm::vec2 projectilePos;
-    if (Player->Shoot(projectilePos))
+    if (m_pPlayer->Shoot(projectilePos))
     {
-         Projectiles.push_back(ProjectileObject(projectilePos, PROJECTILE_SIZE, PROJECTILE_VELOCITY));
+         m_vecProjectiles.push_back(ProjectileObject(projectilePos, PROJECTILE_SIZE, PROJECTILE_VELOCITY));
     }
 }
 
@@ -179,17 +200,17 @@ void Game::Update(float dt)
 {
     if (this->State == GAME_ACTIVE)
     {
-        if (Player)
-            Player->Update(dt);
-        if (Chunks.size() == 1)
+        if (m_pPlayer)
+            m_pPlayer->Update(dt);
+        if (m_vecChunks.size() == 1)
             this->GenerateChunks();
-        for (auto& chunk : Chunks)
+        for (auto& chunk : m_vecChunks)
         {
-            chunk.Move(dt, Player->Velocity.y);
+            chunk.Move(dt, m_pPlayer->Velocity.y);
         }
-        for (auto& projectile : Projectiles)
+        for (auto& projectile : m_vecProjectiles)
         {
-            projectile.Move(dt, Player->Position.x);
+            projectile.Move(dt, m_pPlayer->Position.x);
         }
         this->DoCollisions();
     }
@@ -197,13 +218,13 @@ void Game::Update(float dt)
 
 void Game::DoCollisions()
 {
-    for (auto& chunk : Chunks)
+    for (auto& chunk : m_vecChunks)
     {
         if (chunk._offset + Height * 2 < 0)
             break;
         for (auto& border : chunk.Borders)
         {
-            for (auto& projectile : Projectiles)
+            for (auto& projectile : m_vecProjectiles)
             {
                 if (CollisionManager::DoCollisions(&border, &projectile, false, false))
                 {
@@ -211,11 +232,11 @@ void Game::DoCollisions()
                     continue;
                 }
             }
-            if (!Player->IsDestroyed)
+            if (!m_pPlayer->IsDestroyed)
             {
-                if (CollisionManager::DoCollisions(&border, Player.get(), false, true))
+                if (CollisionManager::DoCollisions(&border, m_pPlayer.get(), false, true))
                 {
-                    Player->IsDestroyed = true;
+                    m_pPlayer->IsDestroyed = true;
                     this->EndGame();
                     return;
                 }
@@ -223,7 +244,7 @@ void Game::DoCollisions()
         }
         for (auto& enemy : chunk.Enemies)
         {
-            for (auto& projectile : Projectiles)
+            for (auto& projectile : m_vecProjectiles)
             {
                 if (CollisionManager::DoCollisions(&enemy, &projectile, true, false))
                 {
@@ -233,11 +254,11 @@ void Game::DoCollisions()
                     continue;
                 }
             }
-            if (Player != nullptr)
+            if (m_pPlayer != nullptr)
             {
-                if (CollisionManager::DoCollisions(&enemy, Player.get(), true, true))
+                if (CollisionManager::DoCollisions(&enemy, m_pPlayer.get(), true, true))
                 {
-                    Player->IsDestroyed = true;
+                    m_pPlayer->IsDestroyed = true;
                     enemy.IsDestroyed = true;
                     this->EndGame();
                     
@@ -252,12 +273,12 @@ void Game::Render()
 { 
     if (this->State == GAME_ACTIVE)
     {
-        Player->Draw(m_pSpriteRenderer);
-        for (auto& projectile : Projectiles)
+        m_pPlayer->Draw(m_pSpriteRenderer);
+        for (auto& projectile : m_vecProjectiles)
         {
             projectile.Draw(m_pColorRenderer);
         }
-        for (auto& chunk : Chunks)
+        for (auto& chunk : m_vecChunks)
         {
             //chunk->Draw(*spriteRenderer, *colorRenderer);
             chunk.Draw(m_pSpriteRenderer);
@@ -279,18 +300,18 @@ void Game::Render()
 
 void Game::Dispose()
 {
-    for (auto it = Projectiles.begin(); it != Projectiles.end(); ) {
+    for (auto it = m_vecProjectiles.begin(); it != m_vecProjectiles.end(); ) {
         if (it->IsDestroyed) {
-            it = Projectiles.erase(it);
+            it = m_vecProjectiles.erase(it);
         }
         else {
             ++it;
         }
     }
 
-    for (auto it = Chunks.begin(); it != Chunks.end(); ) {
+    for (auto it = m_vecChunks.begin(); it != m_vecChunks.end(); ) {
         if (it->Dispose()) {
-            it = Chunks.erase(it);
+            it = m_vecChunks.erase(it);
         }
         else {
             ++it;
@@ -306,13 +327,13 @@ void Game::AddScore(const int scoreToAdd)
 void Game::ResetPlayer()
 {
     // reset player/ball stats
-    Player->Size = PLAYER_SIZE;
-    Player->Position = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
-    Player->Velocity.y = PLAYER_VELOCITY_Y_BASE;
+    m_pPlayer->Size = PLAYER_SIZE;
+    m_pPlayer->Position = glm::vec2(this->Width / 2.0f - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y - PLAYER_OFFSET_Y);
+    m_pPlayer->Velocity.y = PLAYER_VELOCITY_Y_BASE;
     //Ball->Reset(Player->Position + glm::vec2(PLAYER_SIZE.x / 2.0f - BALL_RADIUS, -(BALL_RADIUS * 2.0f)), INITIAL_BALL_VELOCITY);
     // also disable all active powerups
     //Effects->Chaos = Effects->Confuse = false;
     //Ball->PassThrough = Ball->Sticky = false;
-    Player->Color = glm::vec3(1.0f);
+    m_pPlayer->Color = glm::vec3(1.0f);
     //Ball->Color = glm::vec3(1.0f);
 }

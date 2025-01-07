@@ -14,7 +14,8 @@ static void ALC_CheckAndThrow(ALCdevice* device)
 
 static void AL_CheckAndThrow()
 {
-	if (alGetError() != AL_NO_ERROR)
+	ALenum err = alGetError();
+	if (err != AL_NO_ERROR)
 	{
 		throw("error with al");
 	}

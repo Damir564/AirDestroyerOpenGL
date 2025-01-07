@@ -22,6 +22,7 @@ public:
     //bool    Sticky, PassThrough;
     // float projectileSpeed = 200.0f;
     // constructor(s)
+    std::unique_ptr<SoundEffectsPlayer> m_pSoundEffectsPlayer;
     PlayerObject();
     PlayerObject(glm::vec2 pos
         , glm::vec2 size
@@ -33,6 +34,7 @@ public:
     //glm::vec2 ProcessInput(float dt, Game* game);
     void Move(const float dt, const Game& game);
     bool Shoot(glm::vec2& projectilePos);
+    ~PlayerObject() override;
     // resets the ball to original state with given position and velocity
     // void      Reset(glm::vec2 position, glm::vec2 velocity);
 private:

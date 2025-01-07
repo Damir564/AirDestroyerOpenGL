@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <iostream>
+#include "utilities/sound_manager.h"
 
 enum GameState {
     GAME_ACTIVE,
@@ -36,6 +37,8 @@ const glm::vec2 SHIP_VELOCITY(0.0f, 0.0f);
 const glm::vec2 BORDER_SIZE(125.0f, 0.0f);
 const glm::vec3 BORDER_COLOR = { 0.333f, 0.651f, 0.220f };
 
+// std::unique_ptr<SoundEffectsPlayer> m_pSoundEffectsPlayer;
+
 class ProjectileObject;
 class ChunkObject;
 class PlayerObject;
@@ -48,9 +51,7 @@ public:
     bool                    KeysProcessed[1024];
     unsigned int            Width, Height;
 
-    std::vector<ProjectileObject> Projectiles;
-    std::vector<ChunkObject> Chunks;
-    std::unique_ptr<PlayerObject> Player;
+    
     // constructor/destructor
     Game(unsigned int width, unsigned int height);
     ~Game();
@@ -69,10 +70,14 @@ public:
     //void ResetLevel();
     void ResetPlayer();
     // powerups
+    std::vector<ProjectileObject> m_vecProjectiles;
+    std::vector<ChunkObject> m_vecChunks;
+    std::unique_ptr<PlayerObject> m_pPlayer;
     //void SpawnPowerUps(GameObject& block);
     //void UpdatePowerUps(float dt);
 private:
     int m_score;
+    // std::unique_ptr<SoundDevice> m_pSoundDevice;
 
     static float firstFrame;
     void GenerateChunks();
@@ -90,4 +95,7 @@ private:
 
     void InitTextRenderer();
     void LoadFreeType();
+
+    void InitSounds();
+    void LoadSounds();
 };

@@ -12,6 +12,7 @@ SoundEffectsPlayer::SoundEffectsPlayer()
 SoundEffectsPlayer::~SoundEffectsPlayer()
 {
 	alDeleteSources(1, &p_Source);
+	AL_CheckAndThrow();
 }
 
 void SoundEffectsPlayer::Play(const ALuint& buffer_to_play)
@@ -25,7 +26,7 @@ void SoundEffectsPlayer::Play(const ALuint& buffer_to_play)
 	alSourcePlay(p_Source);
 	AL_CheckAndThrow();
 }
-
+ 
 void SoundEffectsPlayer::Stop()
 {
 	alSourceStop(p_Source);

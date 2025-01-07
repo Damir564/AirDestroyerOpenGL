@@ -6,10 +6,10 @@ Game game(SCREEN_WIDTH, SCREEN_HEIGHT);
 int main()
 {
     SoundDevice* soundDevice = SoundDevice::Get();
+    // SoundDevice::Get();
+    //SoundEffectsPlayer soundEffectsPlayer;
+    //ALuint sound1 = SoundEffectsLibrary::Get()->Load("resources/sounds/effect_fire.mp3"); 
 
-    ALuint sound1 = SoundEffectsLibrary::Get()->Load("resources/sounds/effect_fire.wav"); 
-    SoundEffectsPlayer soundEffectsPlayer;
-    soundEffectsPlayer.Play(sound1);
 
     // glfw: initialize and configure
     glfwInit();

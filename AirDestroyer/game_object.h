@@ -29,6 +29,7 @@ public:
     // draw sprite
     virtual void Draw(std::unique_ptr<SpriteRenderer>& renderer);
     virtual void Draw(std::unique_ptr<ColorRenderer>& renderer);
+    virtual ~GameObject();
     // virtual void Draw(SpriteRenderer& spriteRenderer, ColorRenderer& colorRenderer);
 };
 

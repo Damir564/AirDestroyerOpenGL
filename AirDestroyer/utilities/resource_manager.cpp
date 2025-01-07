@@ -7,9 +7,27 @@
 #include "stb_image.h"
 
 // Instantiate static variables
-std::map<std::string, Texture2D>    ResourceManager::Textures;
-std::map<std::string, Shader>       ResourceManager::Shaders;
+std::map<std::string, Texture2D>            ResourceManager::Textures;
+std::map<std::string, Shader>               ResourceManager::Shaders;
+std::map<std::string, ALuint>               ResourceManager::Sounds;
+//SoundEffectsPlayer                          ResourceManager::SoundEffectsPlayer;
 
+
+void ResourceManager::InitSounds()
+{
+    //ResourceManager::SoundEffectsPlayer;
+}
+
+ALuint ResourceManager::LoadSound(const char* soundFile, std::string name)
+{
+    Sounds[name] = SoundEffectsLibrary::Get()->Load(soundFile);
+    return Sounds[name];
+}
+
+void ResourceManager::PlaySound(std::string name)
+{
+    //SoundEffectsPlayer.Play(Sounds[name]);
+}
 
 Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
 {
@@ -41,6 +59,8 @@ void ResourceManager::Clear()
     // (properly) delete all textures
     for (auto iter : Textures)
         glDeleteTextures(1, &iter.second.ID);
+    for (auto iter : Sounds)
+        SoundEffectsLibrary::Get()->UnLoad(Sounds[iter.first]);
 }
 
 Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile)
