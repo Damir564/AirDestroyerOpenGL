@@ -1,16 +1,13 @@
 #include "resource_manager.h"
 
-#include <iostream>
-#include <sstream>
-#include <fstream>
 
 #include "stb_image.h"
 
 // Instantiate static variables
-std::map<std::string, Texture2D>            ResourceManager::Textures;
-std::map<std::string, Shader>               ResourceManager::Shaders;
-std::map<std::string, ALuint>               ResourceManager::Sounds;
-//SoundEffectsPlayer                          ResourceManager::SoundEffectsPlayer;
+std::map<std::string, Texture2D>                    ResourceManager::Textures;
+std::map<std::string, Shader>                       ResourceManager::Shaders;
+std::map<std::string, ALuint>                       ResourceManager::Sounds;
+std::map<std::string, std::unique_ptr<MusicBuffer>> ResourceManager::Musics;
 
 
 void ResourceManager::InitSounds()
@@ -24,9 +21,10 @@ ALuint ResourceManager::LoadSound(const char* soundFile, std::string name)
     return Sounds[name];
 }
 
-void ResourceManager::PlaySound(std::string name)
+void ResourceManager::LoadMusic(const char* musicFile, std::string name)
 {
-    //SoundEffectsPlayer.Play(Sounds[name]);
+    Musics[name] = std::make_unique<MusicBuffer>(musicFile);
+    //return Musics[name];
 }
 
 Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
@@ -59,8 +57,6 @@ void ResourceManager::Clear()
     // (properly) delete all textures
     for (auto iter : Textures)
         glDeleteTextures(1, &iter.second.ID);
-    for (auto iter : Sounds)
-        SoundEffectsLibrary::Get()->UnLoad(Sounds[iter.first]);
 }
 
 Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile)

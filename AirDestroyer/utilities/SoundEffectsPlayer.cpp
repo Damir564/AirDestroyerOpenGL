@@ -22,7 +22,7 @@ void SoundEffectsPlayer::Play(const ALuint& buffer_to_play)
 		p_Buffer = buffer_to_play;
 		alSourcei(p_Source, AL_BUFFER, (ALint)p_Buffer);
 		AL_CheckAndThrow();
-	}
+	} 
 	alSourcePlay(p_Source);
 	AL_CheckAndThrow();
 }

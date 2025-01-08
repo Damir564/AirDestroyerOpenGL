@@ -22,7 +22,7 @@ public:
     //bool    Sticky, PassThrough;
     // float projectileSpeed = 200.0f;
     // constructor(s)
-    std::unique_ptr<SoundEffectsPlayer> m_pSoundEffectsPlayer;
+    // std::unique_ptr<SoundEffectsPlayer> m_pSoundEffectsPlayer;
     PlayerObject();
     PlayerObject(glm::vec2 pos
         , glm::vec2 size

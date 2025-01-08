@@ -1,7 +1,7 @@
 #include "program.h"
 #include "sound_manager.h"
 
-Game game(SCREEN_WIDTH, SCREEN_HEIGHT);
+Game game = Game(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 int main()
 {
@@ -73,7 +73,6 @@ int main()
 
         glfwSwapBuffers(window);
     }
-
     ResourceManager::Clear();
 
     glfwTerminate();

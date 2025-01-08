@@ -69,14 +69,17 @@ public:
     // reset
     //void ResetLevel();
     void ResetPlayer();
+    void PlaySound(ALuint buffer);
     // powerups
-    std::vector<ProjectileObject> m_vecProjectiles;
-    std::vector<ChunkObject> m_vecChunks;
-    std::unique_ptr<PlayerObject> m_pPlayer;
     //void SpawnPowerUps(GameObject& block);
     //void UpdatePowerUps(float dt);
 private:
     int m_score;
+    // std::unique_ptr<MusicBuffer> m_pMusicBuffer;
+    std::unique_ptr<SoundEffectsPlayer> m_pSoundEffectsPlayer;
+    std::vector<ProjectileObject> m_vecProjectiles;
+    std::vector<ChunkObject> m_vecChunks;
+    std::unique_ptr<PlayerObject> m_pPlayer;
     // std::unique_ptr<SoundDevice> m_pSoundDevice;
 
     static float firstFrame;
@@ -99,3 +102,5 @@ private:
     void InitSounds();
     void LoadSounds();
 };
+
+extern Game game;

@@ -41,6 +41,7 @@ Game::Game(unsigned int width, unsigned int height)
 
 Game::~Game()
 {
+
 }
 
 void Game::GenerateChunks()
@@ -76,6 +77,10 @@ void Game::DestroyAll()
 
 void Game::StartGame()
 {
+    //m_pMusicBuffer->Stop();
+    ResourceManager::Musics["game_end"]->Stop();
+    if (!ResourceManager::Musics["space"]->isPlaying())
+        ResourceManager::Musics["space"]->Play();
     this->GenerateChunks();
     this->CreatePlayer();
     this->State = GAME_ACTIVE;
@@ -84,6 +89,9 @@ void Game::StartGame()
 void Game::EndGame()
 {
     DestroyAll();
+    //m_pMusicBuffer->Play();
+    // ResourceManager::Musics["space"]->Stop();
+    ResourceManager::Musics["game_end"]->Play();
     this->State = GAME_END;
 }
 
@@ -137,6 +145,8 @@ void Game::InitSounds()
     // m_pSoundDevice = std::make_unique<SoundDevice>(SoundDevice::Get());
     // m_pSoundEffectsPlayer = std::make_unique<SoundEffectsPlayer>();
     // m_pSoundEffectsPlayer = std::make_unique<SoundEffectsPlayer>();
+    // m_pMusicBuffer = std::make_unique<MusicBuffer>("resources/sounds/music_game_end.mp3");
+    m_pSoundEffectsPlayer = std::make_unique<SoundEffectsPlayer>();
     ResourceManager::InitSounds();
 }
 
@@ -145,7 +155,9 @@ void Game::LoadSounds()
     // ALuint soundFire = SoundEffectsLibrary::Get()->Load("resources/sounds/effect_fire.mp3");
     ResourceManager::LoadSound("resources/sounds/effect_fire.mp3", "fire");
     ResourceManager::LoadSound("resources/sounds/effect_hit.mp3", "hit");
-    ResourceManager::LoadSound("resources/sounds/game_end.mp3", "game_end");
+    ResourceManager::LoadMusic("resources/sounds/music_game_end.mp3", "game_end");
+    ResourceManager::LoadMusic("resources/sounds/music_space.mp3", "space");
+    // ResourceManager::LoadSound("resources/sounds/music_game_end.mp3", "game_end");
     //ALuint soundFire2 = SoundEffectsLibrary::Get()->Load("resources/sounds/effect_fire.mp3");
     
 }
@@ -212,7 +224,24 @@ void Game::Update(float dt)
         {
             projectile.Move(dt, m_pPlayer->Position.x);
         }
-        this->DoCollisions();
+        this->DoCollisions();       
+    }
+
+    //Play Music
+    if (this->State == GAME_END)
+    {
+        ALint musicState;
+        alGetSourcei(ResourceManager::Musics["game_end"]->getSource(), AL_SOURCE_STATE, &musicState);
+        if (musicState == AL_PLAYING && alGetError() == AL_NO_ERROR)
+        {
+            ResourceManager::Musics["game_end"]->UpdateBufferStream();
+        }
+    }
+    ALint musicState;
+    alGetSourcei(ResourceManager::Musics["space"]->getSource(), AL_SOURCE_STATE, &musicState);
+    if (musicState == AL_PLAYING && alGetError() == AL_NO_ERROR)
+    {
+        ResourceManager::Musics["space"]->UpdateBufferStream();
     }
 }
 
@@ -336,4 +365,9 @@ void Game::ResetPlayer()
     //Ball->PassThrough = Ball->Sticky = false;
     m_pPlayer->Color = glm::vec3(1.0f);
     //Ball->Color = glm::vec3(1.0f);
+}
+
+void Game::PlaySound(ALuint buffer)
+{
+    m_pSoundEffectsPlayer->Play(buffer);
 }
