@@ -5,19 +5,20 @@
 #include <iostream>
 
 
-PlayerObject::PlayerObject() : GameObject(), m_canShoot(true)
+PlayerObject::PlayerObject() : GameObject(), m_canShoot(true), m_shootTime(0.0f), m_fDistance(0.0f)
 { }
 
 PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity, glm::vec3 color, Texture2D sprite)
-    : GameObject(pos, size, velocity, color, sprite), m_canShoot(true)// , m_pSoundEffectsPlayer(std::make_unique<SoundEffectsPlayer>())
+    : GameObject(pos, size, velocity, color, sprite), m_canShoot(true), m_shootTime(0.0f), m_fDistance(0.0f)// , m_pSoundEffectsPlayer(std::make_unique<SoundEffectsPlayer>())
 { }
 
 void PlayerObject::Update(const float dt)
 {
-    if ((float)glfwGetTime() - this->m_shootTime > m_coolDown)
+    if ((float)glfwGetTime() - this->m_shootTime > SHOOT_COOL_DOWN)
     {
         m_canShoot = true;
     }
+    m_fDistance += Velocity.y * dt * DISTANCE_MULTIPLIER;
 }
 
 void PlayerObject::Move(const float dt, const Game& game)
@@ -68,6 +69,11 @@ bool PlayerObject::Shoot(glm::vec2& projectilePos)
     //    // return false;
     //}
     return false;
+}
+
+int PlayerObject::GetDistance()
+{
+    return (int)m_fDistance;
 }
 
 PlayerObject::~PlayerObject()

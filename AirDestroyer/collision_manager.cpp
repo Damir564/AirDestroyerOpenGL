@@ -27,23 +27,8 @@ bool CollisionManager::DoCollisions(const GameObject* aGameObject, const GameObj
 		return false;
 
 	if (aPixelPerfectCollision == false && bPixelPerfectCollision == false)
-	{
-		//std::cout << "Border" << std::endl;
-		//std::cout << "Position: " << std::endl
-		//	<< "aLeft: " << aLeft << "; aRight: " << aRight << std::endl
-		//	<< "aBottom: " << aBottom << "; aTop: " << aTop << std::endl;
-		//std::cout << "Size: " << aGameObject->Size.x << "; " << aGameObject->Size.y << std::endl;
-
-		//std::cout << "Projectile" << std::endl;
-		//std::cout << "Position: " << std::endl
-		//	<< "bLeft: " << bLeft << "; bRight: " << bRight << std::endl
-		//	<< "bBottom: " << bBottom << "; bTop: " << bTop << std::endl;
-		//std::cout << "===============================" << std::endl;
-		//std::cout << "Projectile" << std::endl;
-		//std::cout << "Position: " << bGameObject->Position.x << "; " << bGameObject->Position.y << std::endl;
-		//std::cout << "Size: " << bGameObject->Size.x << "; " << bGameObject->Size.y << std::endl;
 		return true;
-	}
+	
 
 
 	

@@ -21,9 +21,9 @@ ALuint ResourceManager::LoadSound(const char* soundFile, std::string name)
     return Sounds[name];
 }
 
-void ResourceManager::LoadMusic(const char* musicFile, std::string name)
+void ResourceManager::LoadMusic(const char* musicFile, std::string name, bool bLooped)
 {
-    Musics[name] = std::make_unique<MusicBuffer>(musicFile);
+    Musics[name] = std::make_unique<MusicBuffer>(musicFile, bLooped);
     //return Musics[name];
 }
 

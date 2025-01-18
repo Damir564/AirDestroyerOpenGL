@@ -15,7 +15,7 @@ TextRenderer::~TextRenderer()
     glDeleteVertexArrays(1, &this->VAO);
 }
 
-void TextRenderer::DrawText(std::string text, glm::vec2 position, float scale, glm::vec3 color)
+void TextRenderer::DrawText(std::string text, glm::vec2 position, float scale, glm::vec3 color, PIVOT pivot)
 {
     // prepare transformations
     this->shader.Use();
@@ -24,8 +24,15 @@ void TextRenderer::DrawText(std::string text, glm::vec2 position, float scale, g
     glBindVertexArray(this->VAO);
 
     // iterate through all characters
-    std::string::const_iterator c;
-    for (c = text.begin(); c != text.end(); c++)
+    float textWidth = 0.0f;
+    float textHeight = 0.0f;
+    for (std::string::const_iterator c = text.begin(); c != text.end(); c++)
+    {
+        Character ch = Characters[*c];
+        textWidth += (ch.Advance >> 6) * scale;
+        textHeight = textHeight < ch.Size.y * scale ? ch.Size.y * scale : textHeight;
+    }
+    for (std::string::const_iterator c = text.begin(); c != text.end(); c++)
     {
         Character ch = Characters[*c];
 
@@ -34,6 +41,12 @@ void TextRenderer::DrawText(std::string text, glm::vec2 position, float scale, g
 
         float w = ch.Size.x * scale;
         float h = ch.Size.y * scale;
+        if (pivot == RIGHT)
+            xpos -= textWidth;
+        else if (pivot == MID)
+            xpos -= textWidth / 2.0f;
+        ypos -= textHeight / 2.0f;
+        // std::cout << "text:\t" << text << "\tis:\t" << xpos << "\t" << ypos << std::endl;
         // update VBO for each character
         float vertices[6][4] = {
             { xpos,     ypos + h,   0.0f, 0.0f },

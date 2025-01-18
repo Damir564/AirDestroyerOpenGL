@@ -21,7 +21,7 @@ public:
         , glm::vec3 color = glm::vec3(0.0f)
         , Texture2D sprite = Texture2D());
     // moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
-    glm::vec2 Move(float dt, const float parentVelocity = 0.0f);
+    glm::vec2 Update(float dt, const float parentVelocity = 0.0f);
     // resets the ball to original state with given position and velocity
     void      Reset(glm::vec2 position, glm::vec2 velocity);
 

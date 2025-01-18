@@ -58,9 +58,8 @@ int main()
     {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
         // Program::PrintFloat(currentFrame - firstFrame);
-        glfwPollEvents();
+        lastFrame = currentFrame;
 
         game.ProcessInput(deltaTime);
 
@@ -72,6 +71,7 @@ int main()
         game.Dispose();
 
         glfwSwapBuffers(window);
+        glfwPollEvents();
     }
     ResourceManager::Clear();
 

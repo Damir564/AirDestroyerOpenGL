@@ -46,7 +46,7 @@ EnemyObject::EnemyObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity, glm:
 	//Velocity = glm::vec2(0.0f, 1.0f);
 }
 
-glm::vec2 EnemyObject::Move(float dt, const float parentVelocity)
+glm::vec2 EnemyObject::Update(float dt, const float parentVelocity)
 {
 	this->Position.y += dt * (parentVelocity + this->Velocity.y);
 	return this->Position;

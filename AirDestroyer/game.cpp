@@ -102,6 +102,11 @@ void Game::LoadTextures()
     ResourceManager::LoadTexture("resources/textures/plane_left.png", true, "player_left");
     //return;
     ResourceManager::LoadTexture("resources/textures/ship.png", true, "ship");
+    ResourceManager::LoadTexture("resources/textures/ship.png", true, "ship");
+    for (int i = 0; i != EXPLOSION_SPRITES.size(); ++i)
+    ResourceManager::LoadTexture(std::string("resources/textures/" 
+        + EXPLOSION_SPRITES[i]
+        + ".png").c_str(), true, EXPLOSION_SPRITES[i]);
 }
 
 void Game::InitSpriteRenderer()
@@ -155,8 +160,8 @@ void Game::LoadSounds()
     // ALuint soundFire = SoundEffectsLibrary::Get()->Load("resources/sounds/effect_fire.mp3");
     ResourceManager::LoadSound("resources/sounds/effect_fire.mp3", "fire");
     ResourceManager::LoadSound("resources/sounds/effect_hit.mp3", "hit");
-    ResourceManager::LoadMusic("resources/sounds/music_game_end.mp3", "game_end");
-    ResourceManager::LoadMusic("resources/sounds/music_space.mp3", "space");
+    ResourceManager::LoadMusic("resources/sounds/music_game_end.mp3", "game_end", false);
+    ResourceManager::LoadMusic("resources/sounds/music_space.mp3", "space", true);
     // ResourceManager::LoadSound("resources/sounds/music_game_end.mp3", "game_end");
     //ALuint soundFire2 = SoundEffectsLibrary::Get()->Load("resources/sounds/effect_fire.mp3");
     
@@ -218,11 +223,11 @@ void Game::Update(float dt)
             this->GenerateChunks();
         for (auto& chunk : m_vecChunks)
         {
-            chunk.Move(dt, m_pPlayer->Velocity.y);
+            chunk.Update(dt, m_pPlayer->Velocity.y);
         }
         for (auto& projectile : m_vecProjectiles)
         {
-            projectile.Move(dt, m_pPlayer->Position.x);
+            projectile.Update(dt, m_pPlayer->Position.x);
         }
         this->DoCollisions();       
     }
@@ -278,6 +283,7 @@ void Game::DoCollisions()
                 if (CollisionManager::DoCollisions(&enemy, &projectile, true, false))
                 {
                     AddScore(ENEMY_SCORE);
+                    CreateEffect(chunk, enemy.Position);
                     projectile.IsDestroyed = true;
                     enemy.IsDestroyed = true; 
                     continue;
@@ -302,7 +308,6 @@ void Game::Render()
 { 
     if (this->State == GAME_ACTIVE)
     {
-        m_pPlayer->Draw(m_pSpriteRenderer);
         for (auto& projectile : m_vecProjectiles)
         {
             projectile.Draw(m_pColorRenderer);
@@ -313,17 +318,19 @@ void Game::Render()
             chunk.Draw(m_pSpriteRenderer);
             chunk.Draw(m_pColorRenderer);
         }
+        m_pPlayer->Draw(m_pSpriteRenderer);
         // std::string strScore = std::to_string(m_score);
-        m_pTextRenderer->DrawText(std::to_string(m_score), glm::vec2(50.0f, 50.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        m_pTextRenderer->DrawText(std::to_string(m_score), glm::vec2(50.0f, 50.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), PIVOT::LEFT);
+        m_pTextRenderer->DrawText(std::to_string(m_pPlayer->GetDistance()), glm::vec2(Width - 50.0f, 50.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), PIVOT::RIGHT);
     }
     else if (this->State == GAME_MENU)
     {
-        m_pTextRenderer->DrawText("PRESS SPACE", glm::vec2(this->Width / 3.2f, this->Height / 2.1f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        m_pTextRenderer->DrawText("PRESS SPACE", glm::vec2(this->Width / 2.0f, this->Height / 2.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), PIVOT::MID);
     }
     else if (this->State == GAME_END)
     {
-        m_pTextRenderer->DrawText("GAME OVER", glm::vec2(this->Width / 3.2f + 50.0f, this->Height / 2.1f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
-        m_pTextRenderer->DrawText(std::to_string(m_score), glm::vec2(this->Width / 2.0f, this->Height / 3.2f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        m_pTextRenderer->DrawText("GAME OVER", glm::vec2(this->Width / 2.0f, this->Height / 2.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), PIVOT::MID);
+        m_pTextRenderer->DrawText(std::to_string(m_score), glm::vec2(this->Width / 2.0f, this->Height / 3.2f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), PIVOT::MID);
     }
 }
 
@@ -351,6 +358,11 @@ void Game::Dispose()
 void Game::AddScore(const int scoreToAdd)
 {
     m_score += scoreToAdd;
+}
+
+void Game::CreateEffect(ChunkObject& chunk, const glm::vec2 pos)
+{
+    chunk.CreateEffect(pos);
 }
 
 void Game::ResetPlayer()

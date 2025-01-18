@@ -88,6 +88,25 @@ void MusicBuffer::UpdateBufferStream()
 				p_Sfinfo.samplerate);
 			alSourceQueueBuffers(p_Source, 1, &bufid);
 		}
+		else if (slen == 0)
+		{
+			if (m_bLooped)
+			{
+				sf_seek(p_SndFile, 0, SEEK_SET); // Rewind to the beginning
+				slen = sf_readf_short(p_SndFile, p_Membuf, BUFFER_SAMPLES);
+				if (slen > 0) { // Read data to buffer again.
+					slen *= p_Sfinfo.channels * (sf_count_t)sizeof(short);
+					alBufferData(bufid, p_Format, p_Membuf, (ALsizei)slen, p_Sfinfo.samplerate);
+					alSourceQueueBuffers(p_Source, 1, &bufid);
+				}
+				else {
+					//Handle error if not data was read again after rewind
+					throw("Error reading after rewind");
+				}
+			}
+			else
+				Stop();
+		}
 		if (alGetError() != AL_NO_ERROR)
 		{
 			throw("error buffering music data");
@@ -108,7 +127,6 @@ void MusicBuffer::UpdateBufferStream()
 		alSourcePlay(p_Source);
 		AL_CheckAndThrow();
 	}
-
 }
 
 ALint MusicBuffer::getSource()
@@ -133,7 +151,7 @@ void MusicBuffer::SetGain(const float& val)
 	AL_CheckAndThrow();
 }
 
-MusicBuffer::MusicBuffer(const char* filename)
+MusicBuffer::MusicBuffer(const char* filename, bool bLooped) : p_Format(), m_bLooped(bLooped)
 {
 	alGenSources(1, &p_Source);
 	alGenBuffers(NUM_BUFFERS, p_Buffers);

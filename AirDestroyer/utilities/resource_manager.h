@@ -7,7 +7,7 @@
 
 #include "texture.h"
 #include "shader.h"
-#include <sound_manager.cpp>
+#include <sound_manager.h>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -30,7 +30,7 @@ public:
     // static SoundEffectsPlayer m_pSoundEffectsPlayer;
     static void InitSounds();
     static ALuint LoadSound(const char* soundFile, std::string name);
-    static void LoadMusic(const char* musicFile, std::string name);
+    static void LoadMusic(const char* musicFile, std::string name, bool bLooped = false);
     // loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
     static Shader    LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
     // retrieves a stored sader

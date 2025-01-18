@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <vector>
+#include <array>
 #include <iostream>
 #include "utilities/sound_manager.h"
 
@@ -24,10 +25,17 @@ const glm::vec2 PROJECTILE_SIZE(8.0f, 30.0f);
 const glm::vec2 PROJECTILE_VELOCITY(0.0f, -1400.0f);
 // const glm::vec2 PROJECTILE_VELOCITY(0.0f, -50.0f);
 const glm::vec3 PROJECTILE_COLOR = { 230.0f / 255.0f, 230.0f / 255.0f, 62.0f / 255.0f };
+const glm::vec3 EFFECT_COLOR = { 230.0f / 255.0f, 10.0f / 255.0f, 162.0f / 255.0f };
 // const glm::vec3 PROJECTILE_COLOR = { 250.0f / 255.0f, 0.0f / 255.0f, 62.0f / 255.0f };
 
 const glm::vec2 SHIP_SIZE(120.0f, 30.0f);
 const glm::vec2 SHIP_VELOCITY(0.0f, 0.0f);
+
+const std::array<std::string, 2> EXPLOSION_SPRITES
+{
+    "explosion_sprite_first",
+    "explosion_sprite_second"
+};
 
 // const glm::vec2 ENEMY_VELOCITY(0.0f, 200.0f);
 
@@ -65,6 +73,7 @@ public:
     void Render();
     void Dispose();
     void AddScore(const int scoreToAdd);
+    void CreateEffect(ChunkObject& chunk, const glm::vec2 pos);
     //void DoCollisions();
     // reset
     //void ResetLevel();

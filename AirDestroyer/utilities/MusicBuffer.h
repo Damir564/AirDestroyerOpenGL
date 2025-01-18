@@ -17,7 +17,7 @@ public:
 
 	void SetGain(const float& val);
 
-	MusicBuffer(const char* filename);
+	MusicBuffer(const char* filename, bool bLooped = false);
 	~MusicBuffer();
 private:
 	ALuint p_Source;
@@ -28,6 +28,7 @@ private:
 	SF_INFO p_Sfinfo;
 	short* p_Membuf;
 	ALenum p_Format;
+	bool m_bLooped;
 
 	MusicBuffer() = delete;
 };

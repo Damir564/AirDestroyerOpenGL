@@ -17,6 +17,12 @@ struct Character {
     unsigned int Advance;   // Horizontal offset to advance to next glyph
 };
 
+const enum PIVOT {
+    LEFT,
+    MID,
+    RIGHT
+};
+
 
 class TextRenderer
 {
@@ -30,7 +36,8 @@ public:
     void DrawText(std::string text
         , glm::vec2 position
         , float scale = 32.0f
-        , glm::vec3 color = glm::vec3(1.0f));
+        , glm::vec3 color = glm::vec3(1.0f)
+        , PIVOT = LEFT);
 private:
     // Render state
     Shader       shader;

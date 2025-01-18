@@ -9,21 +9,21 @@ ProjectileObject::ProjectileObject() : GameObject()
 ProjectileObject::ProjectileObject(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity)
 	: GameObject(pos, size, velocity, PROJECTILE_COLOR) { }
 
-glm::vec2 ProjectileObject::Move(float dt)
-{
-    this->Position.y += this->Velocity.y * dt;
+//glm::vec2 ProjectileObject::Move(float dt)
+//{
+//    this->Position.y += this->Velocity.y * dt;
+//
+//	
+//	if (this->Position.y <= -PROJECTILE_SIZE.y)
+//	{
+//		IsDestroyed = true;
+//		std::cout << this->Position.y << std::endl;
+//	}
+//
+//	return this->Position;
+//}
 
-	
-	if (this->Position.y <= -PROJECTILE_SIZE.y)
-	{
-		IsDestroyed = true;
-		std::cout << this->Position.y << std::endl;
-	}
-
-	return this->Position;
-}
-
-glm::vec2 ProjectileObject::Move(float dt, float playerPositionX)
+glm::vec2 ProjectileObject::Update(float dt, float playerPositionX)
 {
 	this->Position.y += this->Velocity.y * dt;
 	this->Position.x = playerPositionX + (PLAYER_SIZE.x - PROJECTILE_SIZE.x) / 2;

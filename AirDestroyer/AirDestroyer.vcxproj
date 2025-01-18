@@ -148,6 +148,7 @@
     <ClCompile Include="border_object.cpp" />
     <ClCompile Include="chunk_object.cpp" />
     <ClCompile Include="collision_manager.cpp" />
+    <ClCompile Include="effect_object.cpp" />
     <ClCompile Include="enemy_object.cpp" />
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="glad.c" />
@@ -159,7 +160,6 @@
     <ClCompile Include="utilities\SoundEffectsPlayer.cpp" />
     <ClCompile Include="utilities\SoundEffectsLibrary.cpp" />
     <ClCompile Include="utilities\SoundDevice.cpp" />
-    <ClCompile Include="utilities\sound_manager.cpp" />
     <ClCompile Include="utilities\text_renderer.cpp" />
     <ClCompile Include="utilities\color_renderer.cpp" />
     <ClCompile Include="utilities\resource_manager.cpp" />
@@ -172,6 +172,7 @@
     <ClInclude Include="border_object.h" />
     <ClInclude Include="chunk_object.h" />
     <ClInclude Include="collision_manager.h" />
+    <ClInclude Include="effect_object.h" />
     <ClInclude Include="enemy_object.h" />
     <ClInclude Include="game_object.h" />
     <ClInclude Include="game.h" />

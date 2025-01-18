@@ -12,6 +12,8 @@
 const float PLAYER_VELOCITY_Y_BASE = 400.0f;
 const float PLAYER_VELOCITY_Y_UP = PLAYER_VELOCITY_Y_BASE * 1.5f;
 const float PLAYER_VELOCITY_Y_DOWN = PLAYER_VELOCITY_Y_BASE / 2.0f;
+const float SHOOT_COOL_DOWN = 0.5f;
+const float DISTANCE_MULTIPLIER = 0.002f;
 
 class PlayerObject : public GameObject
 {
@@ -34,12 +36,13 @@ public:
     //glm::vec2 ProcessInput(float dt, Game* game);
     void Move(const float dt, const Game& game);
     bool Shoot(glm::vec2& projectilePos);
+    int GetDistance();
     ~PlayerObject() override;
     // resets the ball to original state with given position and velocity
     // void      Reset(glm::vec2 position, glm::vec2 velocity);
 private:
     bool m_canShoot;
-    float m_shootTime = 0.0f;
-    float m_coolDown = 0.5f;
+    float m_shootTime;
+    float m_fDistance;
 };
 

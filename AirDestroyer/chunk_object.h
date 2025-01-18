@@ -11,8 +11,9 @@
 #include "game_object.h"
 #include "enemy_object.h"
 #include "border_object.h"
+#include "effect_object.h"
 
-class ProjectileObject;
+// class ProjectileObject;
 
 
 class ChunkObject : public GameObject
@@ -22,10 +23,12 @@ public:
     //bool        IsSolid;
     std::vector<EnemyObject> Enemies;
     std::vector<BorderObject> Borders;
+    std::vector<EffectObject> Effects;
 
     // ChunkObject(float startHeight);
     ChunkObject(int width, int height, int number);
-    void Move(const float dt, const float fPlayerVelocityY);
+    void Update(const float dt, const float fPlayerVelocityY);
+    void CreateEffect(const glm::vec2 pos);
      
     // void Draw(SpriteRenderer& spriteRenderer, ColorRenderer& colorRenderer);
     void Draw(std::unique_ptr<SpriteRenderer>& renderer) override;

@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
-#include "projectile_object.h"
+// #include "projectile_object.h"
 #include "collision_manager.h"
 
 const int MIN_SHIP_AMOUNT = 1;
@@ -25,8 +25,8 @@ ChunkObject::ChunkObject(int width, int height, int number)
     IsDestroyed = false;
 
     float borderSize = (float)createRandomNumber(1, 3) * BORDER_SIZE.x;
-    Borders.push_back(BorderObject(glm::vec2{ 0.0f, _offset + height}, glm::vec2{ borderSize, height }));
-    Borders.push_back(BorderObject(glm::vec2{ width - borderSize, _offset + height }, glm::vec2{ borderSize, height }));
+    Borders.push_back(BorderObject(glm::vec2{ 0.0f, _offset + height}, glm::vec2{ borderSize, height + 5.0f }));
+    Borders.push_back(BorderObject(glm::vec2{ width - borderSize, _offset + height }, glm::vec2{ borderSize, height + 5.0f }));
 
     int enemiesAmount = createRandomNumber(MIN_SHIP_AMOUNT, MAX_SHIP_AMOUNT);
     std::vector<int> heightPositions;
@@ -53,15 +53,19 @@ ChunkObject::ChunkObject(int width, int height, int number)
     }
 }
 
-void ChunkObject::Move(float dt, float fPlayerVelocityY)
+void ChunkObject::Update(float dt, float fPlayerVelocityY)
 {
     for (auto& enemy : Enemies)
     {
-        enemy.Move(dt, fPlayerVelocityY);
+        enemy.Update(dt, fPlayerVelocityY);
     }
     for (auto& border : Borders)
     {
-        border.Move(dt, fPlayerVelocityY);
+        border.Update(dt, fPlayerVelocityY);
+    }
+    for (auto& effect : Effects)
+    {
+        effect.Update(dt, fPlayerVelocityY);
     }
     _offset += dt * fPlayerVelocityY;
     if (_offset >= 0.0f)
@@ -70,11 +74,20 @@ void ChunkObject::Move(float dt, float fPlayerVelocityY)
     }
 }
 
+void ChunkObject::CreateEffect(const glm::vec2 pos)
+{
+    Effects.push_back(EffectObject(pos, SHIP_SIZE, SHIP_VELOCITY, glm::vec3(1.0f), ResourceManager::GetTexture(EXPLOSION_SPRITES[0])));
+}
+
 void ChunkObject::Draw(std::unique_ptr<SpriteRenderer>& renderer)
 {
     for (auto& enemy : Enemies)
     {
         enemy.Draw(renderer);
+    }
+    for (auto& effect : Effects)
+    {
+        effect.Draw(renderer);
     }
 }
 
@@ -91,7 +104,7 @@ bool ChunkObject::Dispose()
     for (auto it = Enemies.begin(); it != Enemies.end(); ) {
         if (it->IsDestroyed) {
             //delete* it;
-            it = Enemies.erase(it);
+            it = Enemies.erase(it); 
         }
         else {
             ++it;
@@ -100,6 +113,14 @@ bool ChunkObject::Dispose()
     for (auto it = Borders.begin(); it != Borders.end(); ) {
         if (it->IsDestroyed) {
             it = Borders.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+    for (auto it = Effects.begin(); it != Effects.end(); ) {
+        if (it->IsDestroyed) {
+            it = Effects.erase(it);
         }
         else {
             ++it;

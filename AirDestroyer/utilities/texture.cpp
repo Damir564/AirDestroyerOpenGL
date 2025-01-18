@@ -50,6 +50,13 @@ void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char*
         }
         std::cout << std::endl;
     }
+    //for (int y = 0; y < height; y++) {
+    //    for (int x = 0; x < width; x++) {
+    //        int index = (y * width + x);
+    //        std::cout << Mask[index];
+    //    }
+    //    std::cout << std::endl;
+    //}
     // unbind texture
     glBindTexture(GL_TEXTURE_2D, 0);
 }
