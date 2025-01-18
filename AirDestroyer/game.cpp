@@ -325,7 +325,9 @@ void Game::Render()
     }
     else if (this->State == GAME_MENU)
     {
-        m_pTextRenderer->DrawText("PRESS SPACE", glm::vec2(this->Width / 2.0f, this->Height / 2.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), PIVOT::MID);
+        m_pTextRenderer->DrawText("AIR DESTROYER", glm::vec2(this->Width / 2.0f, this->Height / 2.0f + 70.0f), 1.1f, glm::vec3(0.0f, 0.0f, 0.0f), PIVOT::MID);
+        m_pTextRenderer->DrawText("AIR DESTROYER", glm::vec2(this->Width / 2.0f, this->Height / 2.0f + 90.0f), 1.2f, glm::vec3(1.0f, 0.0f, 0.0f), PIVOT::MID);
+        m_pTextRenderer->DrawText("PRESS SPACE", glm::vec2(this->Width / 2.0f, this->Height / 2.0f - 100.0f), 0.9f, glm::vec3(1.0f, 1.0f, 1.0f), PIVOT::MID);
     }
     else if (this->State == GAME_END)
     {
