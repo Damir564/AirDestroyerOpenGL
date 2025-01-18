@@ -32,7 +32,6 @@ glm::vec2 ProjectileObject::Update(float dt, float playerPositionX)
 	if (this->Position.y < 0)
 	{
 		IsDestroyed = true;
-		std::cout << this->Position.y << std::endl;
 	}
 
 	return this->Position;

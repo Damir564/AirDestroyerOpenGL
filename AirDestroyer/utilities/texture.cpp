@@ -31,7 +31,6 @@ void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char*
     // Access the color data as a 2D vector of glm::vec4
     // std::vector<std::vector<glm::vec4>> colorVector(height, std::vector<glm::vec4>(width));
 
-    std::cout << "Mask: " << std::endl;
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             int index = (y * width + x) * 4;
@@ -48,7 +47,6 @@ void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char*
             //);
             //colorVector[y][x] = colorValue;
         }
-        std::cout << std::endl;
     }
     //for (int y = 0; y < height; y++) {
     //    for (int x = 0; x < width; x++) {

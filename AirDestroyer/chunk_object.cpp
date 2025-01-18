@@ -40,7 +40,6 @@ ChunkObject::ChunkObject(int width, int height, int number)
     std::vector<int> enemiesHeightPositions(heightPositions.begin(), heightPositions.begin() + enemiesAmount);  
     for (int heightPosition : enemiesHeightPositions)
     {
-        std::cout << "enemy Height position " << heightPosition << std::endl;
         Enemies.push_back(EnemyObject(glm::vec2{ (float)createRandomNumber(borderSize, width - borderSize - SHIP_SIZE.x)
             , _offset
             + height

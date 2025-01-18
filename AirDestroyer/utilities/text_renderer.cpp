@@ -46,7 +46,6 @@ void TextRenderer::DrawText(std::string text, glm::vec2 position, float scale, g
         else if (pivot == MID)
             xpos -= textWidth / 2.0f;
         ypos -= textHeight / 2.0f;
-        // std::cout << "text:\t" << text << "\tis:\t" << xpos << "\t" << ypos << std::endl;
         // update VBO for each character
         float vertices[6][4] = {
             { xpos,     ypos + h,   0.0f, 0.0f },

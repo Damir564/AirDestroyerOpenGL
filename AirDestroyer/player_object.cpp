@@ -52,7 +52,6 @@ bool PlayerObject::Shoot(glm::vec2& projectilePos)
 {
     if (m_canShoot)
     {
-        std::cout << "Piu" << std::endl;
         game.PlaySound(ResourceManager::Sounds["fire"]);
 
         m_canShoot = false;

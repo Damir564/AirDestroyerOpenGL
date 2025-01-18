@@ -19,7 +19,6 @@ glm::vec2 EffectObject::Update(const float dt, const float parentVelocity)
 		else
 			this->Sprite = ResourceManager::GetTexture(EXPLOSION_SPRITES[m_iCurrentSprite % EXPLOSION_SPRITES.size()]);
 	}
-	// std::cout << (float)glfwGetTime() - m_fTimeLastChangeSprite << "\t: " << EXPLOSION_SPRITES[m_iCurrentSprite] << std::endl;
 	this->Position.y += dt * (parentVelocity + this->Velocity.y);
 	return this->Position;
 }

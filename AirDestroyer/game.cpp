@@ -46,7 +46,9 @@ Game::~Game()
 
 void Game::GenerateChunks()
 {
+#ifdef DEBUG
     std::cout << "Chunks generated" << std::endl;
+#endif
     for (int i = 0; i != CHUNKS_AMOUNT_BUFFER; ++i)
     {
         CreateChunk(i);
